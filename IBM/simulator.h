@@ -20,12 +20,11 @@ void simulation(Parameter *Initial_Parameter, double _w){
 	double size =Initial_Parameter->get_size();
 
 	//INITIALIZE SPECIES CHARACTERISTICS
-	typedef vector<Species*> Community;
-	Community com(M);
+	vector<Species*> SpChar(M);
 
 	for(int k=0 ; k < M ; k++){
 		Species *sp= new Species(col_a,diff_a,l_s,k,M,w);
-		com[k]=sp;
+		SpChar[k]=sp;
 	}
 
 
@@ -54,14 +53,14 @@ void simulation(Parameter *Initial_Parameter, double _w){
 			double resource_density = PI*lambda*lambda*tau*gammaH/muR;
 			//double resource_density = PI*lambda*lambda*tau/ muR;
 
-			vector<double> ocf = initialize_incidence(Initial_Parameter,resource_density, com);
+			vector<double> ocf = initialize_incidence(Initial_Parameter,resource_density, SpChar);
 
 			//INITIALIZE GRID AND PATCH PER GRID
-			Grid *grid = initialize(Initial_Parameter, resource_density, ocf, habitat, com[0]);
+			Grid *grid = initialize(Initial_Parameter, resource_density, ocf, habitat, SpChar[0]);
 			PatchPerGrid *ppg = initializePatchGrid(grid);
 
 			//INITIALIZE COLONIZATION RATE AND COLONIZATION PER GRID
-			double total_colonization = Total_colonization(grid,Initial_Parameter, com);
+			double total_colonization = Total_colonization(grid,Initial_Parameter, SpChar);
 
 			ColonizationPerGrid *cpg= initializeColonizationGrid(grid);
 
@@ -106,15 +105,15 @@ void simulation(Parameter *Initial_Parameter, double _w){
 				if(choose_event <= var->get_birth()) {
 					//cout<<"birth \n";
 					Patch * new_p = new_patch(habitat,Initial_Parameter, lambda);
-					update_birth(new_p, grid, ppg, cpg,Initial_Parameter, com, var);
+					update_birth(new_p, grid, ppg, cpg,Initial_Parameter, SpChar, var);
 
-					//double totcol = Total_colonization(grid, Initial_Parameter, com);
+					//double totcol = Total_colonization(grid, Initial_Parameter, SpChar);
 					//cout<<" total colonization var " << var->get_col() << " and from calculation " << totcol<<endl;
 				}else{
 					if(choose_event <= var->get_birth()+var->get_death()) {
 					//cout<<"death \n ";
 					vector<uInt> chosen_death = select_patch_death(grid,ppg, var);
-					update_death(chosen_death, grid, ppg, cpg, Initial_Parameter, com,var);
+					update_death(chosen_death, grid, ppg, cpg, Initial_Parameter, SpChar,var);
 					npatches =grid->count_patches();
 					if(npatches == 0){
 						for( int m = 0; m < M ; m++){
@@ -126,16 +125,16 @@ void simulation(Parameter *Initial_Parameter, double _w){
 						goto end;
 					}
 
-					//double totcol = Total_colonization(grid, Initial_Parameter, com);
+					//double totcol = Total_colonization(grid, Initial_Parameter, SpChar);
 					//cout<<" total colonization var " << var->get_col() << " and from calculation " << totcol<<endl;
 					}
 					else {
 					//cout<<"colonization \n " ;
 					vector<uInt> chosen_col = select_patch_col(grid, cpg,var,M);
 					update_colonization(chosen_col, grid, cpg, Initial_Parameter, var);
-					update_colonization_rest(chosen_col, grid, cpg, Initial_Parameter, com, var);
+					update_colonization_rest(chosen_col, grid, cpg, Initial_Parameter, SpChar, var);
 
-					//double totcol = Total_colonization(grid, Initial_Parameter, com);
+					//double totcol = Total_colonization(grid, Initial_Parameter, SpChar);
 					//cout<<" total colonization var " << var->get_col() << " and from calculation " << totcol<<endl;
 					}
 				}
@@ -160,7 +159,7 @@ void simulation(Parameter *Initial_Parameter, double _w){
 
 			cout<< " death rate "<< var->get_death()<< "\n" << "computed death rate "<< var->get_temp_result(0)<<"\n";
 
-			tt_col= total_colonization_check(grid,Initial_Parameter, com);
+			tt_col= total_colonization_check(grid,Initial_Parameter, SpChar);
 
 			cout<<"total colonization "<< var->get_col()<<"\n"<<"long total colonization "<< tt_col<<"\n";
 
@@ -200,7 +199,7 @@ void simulation(Parameter *Initial_Parameter, double _w){
     /* Free the species */
 
     for(int m=0 ; m < M ; m++){
-        delete com[m];
+        delete SpChar[m];
     }
 
 	double time_passed;
