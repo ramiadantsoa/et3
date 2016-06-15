@@ -52,7 +52,7 @@ Supplementary_file.pdf
 *.blg
 *.gz
 *.bak
-
+*.exe
 #should ignore this or that folder
 analyses_fig/*/
 ms_fig/
