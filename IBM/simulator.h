@@ -31,7 +31,7 @@ void simulation(Parameter *Initial_Parameter, double _w){
 	double MIN_TAU = 0.75; //this needs to be adjusted with pp and N_STEP_L
 	double pp = 1.25; //this is the power used to increment tau;
 
-	int N_STEP_T = 22;
+	int N_STEP_T = 1;
 
 	double tau;
 	// SIMLUATE ALL DIFFERENT LEVEL OF FRAGMENTATION AND DENSITY OF RESOURCE PRODUCTION

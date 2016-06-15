@@ -1,9 +1,25 @@
 #ifndef __SIMPLE_FUNCTIONS_H_
 #define __SIMPLE_FUNCTIONS_H_
 
-double get_random() {
+double get_log_bessel(double nu){
+  /* Compute the logarithm of modifed Bessel of first order*/
+  double temp;
+
+  temp = boost::math::cyl_bessel_i(0,1/nu);
+  assert(temp >= 0);
+  return log(temp);
+}
+
+//double get_random() {
     /* Give a random number from the unit range (0,1) */
-    return dsfmt_genrand_open_open(&rng);
+//    return dsfmt_genrand_open_open(&rng);
+//}
+
+double get_random(){
+  boost::uniform_real<double> dist(0,1);   // /uniform Distribution
+  boost::variate_generator< boost::mt19937&, boost::uniform_real<>
+ > rand(rng,dist);    // Variate generator
+ return rand();
 }
 
 /* Generate a random number from Exponential distribution with parameter 'lambda' */
@@ -17,11 +33,11 @@ double get_exp(double lambda) {
 uInt get_rand_integer( uInt value){
 	double temp0 = value*get_random();
 	double result = 0.0;
-	
+
 	while(temp0 > result){ // this is slow and needs a better implementation (using floor)
 		result+=1;
 	}
-	
+
 	return (unsigned int) result-1;
 }
 
@@ -68,7 +84,7 @@ double competition (int present_sp, double z){
 /* Calculate distance between (0,0) and (x,y) and the amount of propagules reaching (x,y) */
 double dispersal (double x, double y , double L, double size){
 	double result ;
-		
+
 	double x_coord = (x*x <= (size-x)*(size -x)) ? x*x : (size-x)*(size -x);
 	double y_coord = (y*y <= (size-y)*(size -y)) ? y*y : (size-y)*(size -y);
 
