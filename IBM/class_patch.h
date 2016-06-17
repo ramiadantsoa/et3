@@ -2,7 +2,7 @@
 #define __PATCH_H_
 class Patch {
     public:
-        Patch(double _x, double _y, double _q, int _M) {
+        Patch(double _x, double _y, double _q, int _M, vector<Species*> com) {
             this->x = _x;
             this->y = _y;
             this->quality = _q;
@@ -13,27 +13,32 @@ class Patch {
             for(int i = 0; i<_M; i++) {
                 this->occupancy[i] = 0;
                 this->colonization[i] = 0.0;
-				this->fitness[i]= i ==0 ? 1 : exp(0.125*cos(2.0*PI*(_q - (double)i /(double)(_M-1)))- 6.058104255427814);
+
+                double opt_q = com[i]->get_opt_q();
+                double nu = com[i]->get_nu();
+                double lbessel = com[i]->get_sp_log_bessel();
+
+                this->fitness[i]=  nu == -1 ? 1 : exp(cos(2.0*PI*(_q - opt_q))/nu- lbessel);
             }
         }
 
         ~Patch() {
             delete[] this->occupancy;
             delete[] this->colonization;
-			delete[] this->fitness;
+			      delete[] this->fitness;
         }
 
 		double get_fitness(int sp_id){
-			double fitn = sp_id==0 ? 1 : this->fitness[sp_id];
+			double fitn = this->fitness[sp_id];
 			return fitn;
 		}
 
-        double get_x() { 
-            return this->x; 
+        double get_x() {
+            return this->x;
         }
 
-        double get_y() { 
-            return this->y; 
+        double get_y() {
+            return this->y;
         }
 
         double get_quality() {
@@ -67,8 +72,8 @@ class Patch {
         int *occupancy;
     private:
         int M;
-        double x, y; 
-        double quality; 
+        double x, y;
+        double quality;
 		double *fitness;
 		double *colonization;
 };

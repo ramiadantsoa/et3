@@ -36,40 +36,40 @@ boost::mt19937 rng(std::time(0));
 /*CLASS DECLARATION AND DEFINITION*/
 #include "class_parameter.h"
 #include "class_species.h"
-#include "class_grain.h"
-#include "initialize_incidence.h"
-#include "class_patch_new.h"
-#include "class_grid.h"
-#include "class_patch_per_grid.h"
-#include "class_colonization_per_grid.h"
-#include "class_general_variable.h"
+//#include "class_grain.h"
+//#include "initialize_incidence.h"
+#include "class_patch.h"
+//#include "class_grid.h"
+//#include "class_patch_per_grid.h"
+//#include "class_colonization_per_grid.h"
+//#include "class_general_variable.h"
 
 /*COLONIZATION AND TOTAL COLONIZATION FUNCTION AND RANDOM CHOOOSE PATCH*/
 
-#include "colonization_functions.h"
-#include "section_birth.h"
-#include "section_death.h"
-#include "section_colonization.h"
+//#include "colonization_functions.h"
+//#include "section_birth.h"
+//#include "section_death.h"
+//#include "section_colonization.h"
 
 /*  CONTAINS THE MAIN SIMULATOR */
 
-#include "simulator.h"
+//#include "simulator.h"
 
 int main(){
-	double compet_z =0.0, size = 4, time =100, muR = 0.1, col_a = 0.5, diff_a = 1, w;
-	short int est = 1, aggreg = 0, M;
-	double l_s = 0.5, lambda = 0.2, gammaH = 1;
+	double z =0.0, aggreg = 0.5, size = 4, simtime = 1, muR = 0.1;
+	short int est = 1,  M = 5, replicates = 0, com_id = 2;
+	double lambda = 0.2, gammaH = 1;
 
   std::time_t seed_time = std::time(0);
   rng.seed(seed_time);
 
   //std::cout << "random number is " << get_random()<< std::endl;
 
-  double log_bessel, nu;
-  std::cout << "enter nu ";
-  std::cin >> nu;
-  log_bessel = get_log_bessel(nu);
-  std::cout << "the log bessel of " << nu <<" is "<< log_bessel << std::endl;
+	// double log_bessel, nu;
+  // std::cout << "enter nu ";
+  // std::cin >> nu;
+  // log_bessel = get_log_bessel(nu);
+  // std::cout << "the log bessel of " << nu <<" is "<< log_bessel << std::endl;
 
 	/*cout<<"Compet z: ";
 	cin>>compet_z;
@@ -90,7 +90,6 @@ int main(){
 	//cout<<"Community size: ";
 	//cin>> M;
 	M = 5;
-	w = 2.0;
 
 /*	cout<<"size: ";
 	cin>>size;
@@ -99,9 +98,88 @@ int main(){
 */
 	short int rep = 0;
 
-	Parameter *param = new Parameter(size, M ,l_s, compet_z, time, est, aggreg, muR, rep,col_a,diff_a,lambda, gammaH);
-	simulation(param,w);
+	// std::cout << "community size ";
+	// std::cin >> M;
+	// std::cout << "community ID ";
+	// std::cin >> com_id;
+
+	std::vector<double> pre_com(M*4);
+	for (int i = 0; i < M; i++) {
+		// std::cout << " \n for species" << i << std::endl;
+		// std::cout << "enter col_a "<< std::endl;
+		// std::cin >> com[4*i];
+
+		pre_com[4*i] = 4*i+1; //colonization rate
+		pre_com[4*i+1] = get_random(); //optimal q
+		pre_com[4*i+2] = (i+1)*get_random(); // niche width nu, by convention, nu = -1 for generalist
+		pre_com[4*i+3] = 4*i+3; // dispersal range
+
+		// std::cout << "enter optimal q " << std::endl;
+		// std::cin >> com[4*i+1];
+		//
+		// std::cout << "enter nu " << std::endl;
+		// std::cin >> com[4*i+2];
+		//
+		// std::cout << "enter dispersal l " << std::endl;
+		// std::cin >> com[4*i+3];
+		//
+	}
+
+	Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
+		size, simtime, replicates);
+
+	// std::vector<double> v(M*4);
+	// v = param->get_com();
+
+	//for (int i = 0; i < M*4; i++) {
+		// std::cout << "value" << v[i] << "_and_log_bessel "<< get_log_bessel(v[i])<< std::endl;
+	// }
+
+
+	//INITIALIZE SPECIES CHARACTERISTICS
+	vector<Species*> com(M);
+	/* order of variable col, optimal q, nu, and dispersal */
+	for(int i=0 ; i < M ; i++){
+		Species *sp = new Species(pre_com[4*i],pre_com[4*i+1], pre_com[4*i+2],pre_com[4*i+3]);
+		com[i] = sp;
+	}
+
+
+	// for(int i=0 ; i < M ; i++){
+	// 	std::cout << "the opt_q " << com[i]->get_opt_q()<< std::endl;
+	// 	std::cout << "the log_bessel " << com[i]->get_sp_log_bessel()<< std::endl;
+	// }
+
+
+	Patch *p1 = new Patch(0.2,0.2,0.2,M,com);
+	Patch *p2 = new Patch(0.2,0.2,0.4,M,com);
+	Patch *p3 = new Patch(0.2,0.2,0.6,M,com);
+	Patch *p4 = new Patch(0.2,0.2,0.8,M,com);
+
+	for (int i = 0; i < M; i++) {
+		std::cout << "the niche with of  species " << i << " is " << com[i]->get_nu() << std::endl;
+		std::cout << "the optimal q of  species " << i << " is " << com[i]->get_opt_q() << std::endl;
+		std::cout << " in patch 1 the fitness "<< i <<" is " << p1->get_fitness(i) << std::endl;
+		std::cout << " in patch 2 the fitness "<< i <<" is " << p2->get_fitness(i) << std::endl;
+		std::cout << " in patch 3 the fitness "<< i <<" is " << p3->get_fitness(i) << std::endl;
+		std::cout << " in patch 4 the fitness "<< i <<" is " << p4->get_fitness(i) << std::endl << std::endl;
+
+	}
+
+
+	delete p1;
+	delete p2;
+
 	delete param;
+	for(int i=0 ; i < M ; i++){
+		delete com[i]; // = sp;
+	}
+
+
+	//int comsize = (com.size())/4;
+	//Parameter *param = new Parameter(size, M ,l_s, compet_z, simtime, est, aggreg, muR, rep,lambda, gammaH, com);
+	//simulation(param,w);
+	//delete param;
 
 
 	return 0;
