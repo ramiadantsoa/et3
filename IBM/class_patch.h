@@ -18,6 +18,8 @@ class Patch {
                 double nu = com[i]->get_nu();
                 double lbessel = com[i]->get_sp_log_bessel();
 
+                // std::cout<< "the log bessel is " << lbessel << std::endl;
+
                 this->fitness[i]=  nu == -1 ? 1 : exp(cos(2.0*PI*(_q - opt_q))/nu- lbessel);
             }
         }
@@ -30,6 +32,8 @@ class Patch {
 
 		double get_fitness(int sp_id){
 			double fitn = this->fitness[sp_id];
+      assert(fitn >= 0.);
+      // std::cout<< "the fitness is " << fitn <<std::endl;
 			return fitn;
 		}
 

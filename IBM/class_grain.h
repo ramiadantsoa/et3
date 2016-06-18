@@ -41,9 +41,9 @@ vector<Grain*> *initialize_habitat (Parameter *Initial_Parameter , double gammaH
 	assert(n_grains >= 1);
 	double x_loc, y_loc, q;
 
-	//string all_patches; // stores the position and the type of all patches
-	//ostringstream convert_all_patches;
-	//string patch_file_name= "patch data.csv";
+	// string all_patches; // stores the position and the type of all patches
+	// ostringstream convert_all_patches;
+	// string patch_file_name= "patch data.csv";
 
 	vector<Grain*> *Habitat = new vector<Grain*>;
 
@@ -56,18 +56,17 @@ vector<Grain*> *initialize_habitat (Parameter *Initial_Parameter , double gammaH
 
 		Habitat->push_back(grain);
 
-		//convert_all_patches<<x_loc<<","<<y_loc<<","<<q<<"\n";
+		// convert_all_patches<<x_loc<<","<<y_loc<<","<<q<<"\n";
 	}
 
-	/*all_patches.append(convert_all_patches.str());
-	ofstream patch_file;
-	patch_file.open(patch_file_name.c_str());
-	patch_file<<all_patches;
-	patch_file.close();*/
+	// all_patches.append(convert_all_patches.str());
+	// ofstream patch_file;
+	// patch_file.open(patch_file_name.c_str());
+	// patch_file<<all_patches;
+	// patch_file.close();
 
 	return Habitat;
 }
 
 
 #endif // __GRAIN_H_
-

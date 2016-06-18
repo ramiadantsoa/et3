@@ -166,8 +166,8 @@ Grid *initialize(Parameter *param, double resourceDensity,
 		double x_pos =grain->get_x_pos();
 		double y_pos =grain->get_y_pos();
 
-        double _lambda = lambda*sqrt(get_random());
-        double _angle = 2*PI*get_random();
+    double _lambda = lambda*sqrt(get_random());
+    double _angle = 2*PI*get_random();
 
 		double x = x_pos +_lambda*cos(_angle);
 		if(x<0.0){

@@ -3,11 +3,22 @@
 
 double get_log_bessel(double nu){
   /* Compute the logarithm of modifed Bessel of first order*/
-  double temp;
-
-  temp = boost::math::cyl_bessel_i(0,1/nu);
-  assert(temp >= 0);
-  return log(temp);
+  assert(nu == -1 || nu > 0.0015);
+  long double result;
+  if (nu == - 1) {
+    result = -1; // this is symbolical, in fact if nu = -1 (meaning infinity = generalist), the fitness is directly 1 in class patch
+  }
+  else{
+    double temp = boost::math::cyl_bessel_i(0,1/nu);
+    assert(temp >= 0);
+    // std::cout<< " the bessel is " << temp << endl;
+    result = log(temp);
+    // boost::multiprecision::cpp_dec_float_100 temp = boost::math::cyl_bessel_i(0,1/nu);
+    // assert(result >= 0);
+    // std::cout<< " the new value is " << temp << endl;
+    // double result = 0;//log(temp);
+  }
+  return result;
 }
 
 //double get_random() {
