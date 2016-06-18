@@ -6,13 +6,15 @@ private:
 	double opt_q;
 	double nu;
 	double l_s; //dispersal length
+	short int sp_id;
 
 public:
-	Species(double _col_a, double _opt_q, double _nu, double _l_s){
+	Species(double _col_a, double _opt_q, double _nu, double _l_s, short int _sp_id){
 		this-> col_a = _col_a;
 		this-> l_s = _l_s;
 		this-> opt_q = _opt_q;
 		this-> nu = _nu;
+		this -> sp_id = _sp_id;
 	}
 
 	double get_sp_log_bessel(){
@@ -33,6 +35,10 @@ public:
 
 	double get_nu(){
 		return this->nu;
+	}
+
+	short int get_sp_id(){
+		return this->sp_id;
 	}
 };
 

@@ -26,21 +26,23 @@ vector<uInt> select_patch_death(Grid *grid, PatchPerGrid *ppg, Variable *var){
 	return result;
 }
 
-void update_death(vector<uInt> select_patch_death, Grid *grid, PatchPerGrid *ppg, ColonizationPerGrid *cpg, Parameter *Initial_Parameter, vector<Species*> SpChar, Variable *var){
-	
+void update_death(vector<uInt> select_patch_death, Grid *grid,
+	PatchPerGrid *ppg, ColonizationPerGrid *cpg, Parameter *Initial_Parameter,
+	vector<Species*> com, Variable *var){
+
 	assert(select_patch_death.size() == 3);
 	int ni = select_patch_death[0];
 	int nj = select_patch_death[1];
 	uInt chosen_patch = select_patch_death[2];
 
-	vector<Patch*> * cell = grid->get_cell(ni, nj);
+	vector<Patch*> *cell = grid->get_cell(ni, nj);
 
 	Patch *old_p = (*cell)[chosen_patch];
 
 	int M = Initial_Parameter->get_M();
 
 	double temp_rate;
-	
+
 	for(int m = 0;  m< M;  m++){
 		double old_col = old_p->get_colonization(m);
 
@@ -55,30 +57,30 @@ void update_death(vector<uInt> select_patch_death, Grid *grid, PatchPerGrid *ppg
 	ppg->substract_one_nsp(ni,nj);
 
 	int n_present = old_p->count_present_species();
-	
-	Patch * temp_p = new Patch(old_p->get_x(),old_p->get_y(),old_p->get_quality(),M);
+
+	Patch * temp_p = new Patch(old_p->get_x(),old_p->get_y(),  old_p->get_quality(), M, com);
 
 	for( int m = 0; m< M ; m++){
 		temp_p->occupancy[m] = old_p->occupancy[m];
 	}
 
 	grid->delete_patch(ni, nj, chosen_patch);
-	
-	int ncell = grid->get_number_of_cells(); 
+
+	int ncell = grid->get_number_of_cells();
 	int celli, cellj;
 
 	if ( n_present!=0 ){
 		for( int i = -1 ; i < 2 ; i++) {
 			for (int j = -1 ; j < 2 ; j++ ){
 				celli = (ni + i + ncell)%ncell;
-				cellj =(nj + j + ncell)%ncell; 
+				cellj =(nj + j + ncell)%ncell;
 				vector<Patch*> *temp_grid = grid->get_cell(celli, cellj);
 
 				for (uInt k = 0; k < temp_grid->size(); k ++){
 					Patch *target = (*temp_grid)[k];
 					for ( int m = 0 ; m < M; m++ ){
 						if(temp_p->occupancy[m]==1 && target->occupancy[m]==0){
-							temp_rate = colonization_rate(temp_p, target , SpChar[m], Initial_Parameter);
+							temp_rate = colonization_rate(temp_p, target, com[m], Initial_Parameter);
 							target->modify_col_patch(m, -temp_rate);
 							//target->colonization[m]-= temp_rate ;
 							cpg->modify_col_rate(celli, cellj, -temp_rate);
@@ -101,7 +103,7 @@ void update_death(vector<uInt> select_patch_death, Grid *grid, PatchPerGrid *ppg
 /*Patch *old_patch(Grid *grid, PatchPerGrid *ppg, Variable *var){
 
 	int chosen_grid = ppg->rand_choose_gridD(var->get_temp_result(0));// gives the total number of patches
-	
+
 	int ncell = grid->get_number_of_cells();
 	int ni= (int) chosen_grid%ncell;
 	int nj= (int)(chosen_grid - ni)/ncell;
@@ -116,8 +118,8 @@ void update_death(vector<uInt> select_patch_death, Grid *grid, PatchPerGrid *ppg
 }
 
 
-double update_death(Patch *old_p, Grid *grid, ColonizationPerGrid *cpg, Parameter *Initial_Parameter, vector<Species*> SpChar, int ni , int nj){		
-	
+double update_death(Patch *old_p, Grid *grid, ColonizationPerGrid *cpg, Parameter *Initial_Parameter, vector<Species*> SpChar, int ni , int nj){
+
 	double temp_rate, total_colonization = 0.0;
 
 	int M = Initial_Parameter->get_M();
@@ -127,7 +129,7 @@ double update_death(Patch *old_p, Grid *grid, ColonizationPerGrid *cpg, Paramete
 	for( int i = -1 ; i < 2 ; i++) {
 		for (int j = -1 ; j < 2 ; j++ ){
 			celli = (ni + i + ncell)%ncell;
-			cellj =(nj + j + ncell)%ncell; 
+			cellj =(nj + j + ncell)%ncell;
 			vector<Patch*> * temp_grid = grid->get_cell(celli, cellj);
 			for (uInt k = 0; k < temp_grid->size(); k ++){
 				Patch *target = (*temp_grid)[k];

@@ -36,24 +36,24 @@ boost::mt19937 rng(std::time(0));
 /*CLASS DECLARATION AND DEFINITION*/
 #include "class_parameter.h"
 #include "class_species.h"
-//#include "class_grain.h"
-//#include "initialize_incidence.h"
+#include "class_grain.h"
+#include "initialize_incidence.h"
 #include "class_patch.h"
-//#include "class_grid.h"
-//#include "class_patch_per_grid.h"
-//#include "class_colonization_per_grid.h"
-//#include "class_general_variable.h"
+#include "class_grid.h"
+#include "class_patch_per_grid.h"
+#include "class_colonization_per_grid.h"
+#include "class_general_variable.h"
 
 /*COLONIZATION AND TOTAL COLONIZATION FUNCTION AND RANDOM CHOOOSE PATCH*/
 
-//#include "colonization_functions.h"
-//#include "section_birth.h"
-//#include "section_death.h"
-//#include "section_colonization.h"
+#include "colonization_functions.h"
+#include "section_birth.h"
+#include "section_death.h"
+#include "section_colonization.h"
 
 /*  CONTAINS THE MAIN SIMULATOR */
 
-//#include "simulator.h"
+#include "simulator.h"
 
 int main(){
 	double z =0.0, aggreg = 0.5, size = 4, simtime = 1, muR = 0.1;
@@ -89,7 +89,7 @@ int main(){
 	//cout<<"\n";
 	//cout<<"Community size: ";
 	//cin>> M;
-	M = 5;
+	M = 3;
 
 /*	cout<<"size: ";
 	cin>>size;
@@ -103,16 +103,17 @@ int main(){
 	// std::cout << "community ID ";
 	// std::cin >> com_id;
 
-	std::vector<double> pre_com(M*4);
+	std::vector<double> pre_com(M*5);
 	for (int i = 0; i < M; i++) {
 		// std::cout << " \n for species" << i << std::endl;
 		// std::cout << "enter col_a "<< std::endl;
 		// std::cin >> com[4*i];
 
-		pre_com[4*i] = 4*i+1; //colonization rate
-		pre_com[4*i+1] = get_random(); //optimal q
-		pre_com[4*i+2] = (i+1)*get_random(); // niche width nu, by convention, nu = -1 for generalist
-		pre_com[4*i+3] = 4*i+3; // dispersal range
+		pre_com[5*i] = 0.5; //colonization rate
+		pre_com[5*i+1] = get_random(); //optimal q
+		pre_com[5*i+2] = (i+1)*get_random(); // niche width nu, by convention, nu = -1 for generalist
+		pre_com[5*i+3] = 0.2; // dispersal range
+		pre_com[5*i+4] = i; // species id
 
 		// std::cout << "enter optimal q " << std::endl;
 		// std::cin >> com[4*i+1];
@@ -140,7 +141,7 @@ int main(){
 	vector<Species*> com(M);
 	/* order of variable col, optimal q, nu, and dispersal */
 	for(int i=0 ; i < M ; i++){
-		Species *sp = new Species(pre_com[4*i],pre_com[4*i+1], pre_com[4*i+2],pre_com[4*i+3]);
+		Species *sp = new Species(pre_com[5*i], pre_com[5*i+1], pre_com[5*i+2], pre_com[5*i+3], pre_com[5*i+4]);
 		com[i] = sp;
 	}
 
@@ -150,37 +151,49 @@ int main(){
 	// 	std::cout << "the log_bessel " << com[i]->get_sp_log_bessel()<< std::endl;
 	// }
 
+	//
+	// Patch *p1 = new Patch(0.2,0.2,0.2,M,com);
+	// Patch *p2 = new Patch(0.2,0.2,0.4,M,com);
+	// Patch *p3 = new Patch(0.2,0.2,0.6,M,com);
+	// Patch *p4 = new Patch(0.2,0.2,0.8,M,com);
+	//
+	// for (int i = 0; i < M; i++) {
+	// 	std::cout << "the niche with of  species " << i << " is " << com[i]->get_nu() << std::endl;
+	// 	std::cout << "the optimal q of  species " << i << " is " << com[i]->get_opt_q() << std::endl;
+	// 	std::cout << " in patch 1 the fitness "<< i <<" is " << p1->get_fitness(i) << std::endl;
+	// 	std::cout << " in patch 2 the fitness "<< i <<" is " << p2->get_fitness(i) << std::endl;
+	// 	std::cout << " in patch 3 the fitness "<< i <<" is " << p3->get_fitness(i) << std::endl;
+	// 	std::cout << " in patch 4 the fitness "<< i <<" is " << p4->get_fitness(i) << std::endl << std::endl;
+	//
+	// }
+	//
+	// double new_max_ls, max_ls = 0.0;
+	// for (int i = 0; i < M; i++) {
+	// 	new_max_ls = std::max(max_ls, com[i]->get_l());
+	// 	max_ls = new_max_ls;
+	// }
+	// std::cout << "the max ls is " << max_ls << std::endl;
 
-	Patch *p1 = new Patch(0.2,0.2,0.2,M,com);
-	Patch *p2 = new Patch(0.2,0.2,0.4,M,com);
-	Patch *p3 = new Patch(0.2,0.2,0.6,M,com);
-	Patch *p4 = new Patch(0.2,0.2,0.8,M,com);
+	double agg, midq, newq;
+	std::cout << " enter aggreg ";
+	cin>> agg;
+	std::cout << "enter mid q ";
+	cin>> midq;
+	std::cout << "the new q is " << get_random_patch(midq, agg) <<  std::endl;
 
-	for (int i = 0; i < M; i++) {
-		std::cout << "the niche with of  species " << i << " is " << com[i]->get_nu() << std::endl;
-		std::cout << "the optimal q of  species " << i << " is " << com[i]->get_opt_q() << std::endl;
-		std::cout << " in patch 1 the fitness "<< i <<" is " << p1->get_fitness(i) << std::endl;
-		std::cout << " in patch 2 the fitness "<< i <<" is " << p2->get_fitness(i) << std::endl;
-		std::cout << " in patch 3 the fitness "<< i <<" is " << p3->get_fitness(i) << std::endl;
-		std::cout << " in patch 4 the fitness "<< i <<" is " << p4->get_fitness(i) << std::endl << std::endl;
-
-	}
+	// delete p1;
+	// delete p2;
 
 
-	delete p1;
-	delete p2;
+
+	//int comsize = (com.size())/4;
+	//Parameter *param = new Parameter(size, M ,l_s, compet_z, simtime, est, aggreg, muR, rep,lambda, gammaH, com);
+	simulation(param,com);
 
 	delete param;
 	for(int i=0 ; i < M ; i++){
 		delete com[i]; // = sp;
 	}
-
-
-	//int comsize = (com.size())/4;
-	//Parameter *param = new Parameter(size, M ,l_s, compet_z, simtime, est, aggreg, muR, rep,lambda, gammaH, com);
-	//simulation(param,w);
-	//delete param;
-
 
 	return 0;
 }

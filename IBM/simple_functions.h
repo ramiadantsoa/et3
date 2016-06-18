@@ -15,11 +15,20 @@ double get_log_bessel(double nu){
 //    return dsfmt_genrand_open_open(&rng);
 //}
 
+
 double get_random(){
   boost::uniform_real<double> dist(0,1);   // /uniform Distribution
   boost::variate_generator< boost::mt19937&, boost::uniform_real<>
  > rand(rng,dist);    // Variate generator
  return rand();
+}
+
+// Generate a random number between -x1 and x1
+double get_random_patch(double grain_q, double aggreg){
+  double patch_q;
+  double y = grain_q + aggreg*(2*get_random() - 1);
+  patch_q = fmod(y + 1, 1);
+ return patch_q;
 }
 
 /* Generate a random number from Exponential distribution with parameter 'lambda' */

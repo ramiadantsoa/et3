@@ -23,12 +23,11 @@ double colonization_rate(Patch *source, Patch *target, Species *sp, Parameter *p
 }
 
 
-double total_colonization_rate(Patch *target, Species *sp, Grid *g, Parameter *param, double _max_l){
-	
-	double max_l = _max_l;
+double total_colonization_rate(Patch *target, Species *sp, Grid *g, Parameter *param, double max_l){
+
 	int loc_i = (int)floor ((target->get_x())/ max_l);
 	int loc_j = (int)floor ((target->get_y())/ max_l);
-	
+
 	int celli, cellj;
 	int ncells = g->get_number_of_cells() ;
 	int sp_id =sp->get_sp_id();
@@ -40,10 +39,10 @@ double total_colonization_rate(Patch *target, Species *sp, Grid *g, Parameter *p
 	for ( int i = -1 ; i < 2 ; i++ ){
 		for ( int j = -1 ; j < 2 ; j++){
 			celli = (loc_i + i+ ncells)%ncells;
-			cellj =(loc_j + j + ncells)%ncells; 
+			cellj =(loc_j + j + ncells)%ncells;
 
 			vector<Patch*> *grid = g->get_cell(celli, cellj);
-					
+
 			for (uInt k = 0; k < grid->size(); k ++){
 				Patch *source = (*grid)[k];
 				if(source->occupancy[sp_id]==1){
@@ -55,10 +54,9 @@ double total_colonization_rate(Patch *target, Species *sp, Grid *g, Parameter *p
 	return result;
 }
 
-double total_colonization_check(Grid* grid, Parameter *Initial_Parameter, vector<Species*> SpChar){
+double total_colonization_check(Grid* grid, Parameter *Initial_Parameter, vector<Species*> com, double max_l){
 	int ncell = grid->get_number_of_cells();
 	int M = Initial_Parameter->get_M();
-	double max_l =SpChar[0]->get_l();
 
 	double temp0;
 	double total_colonization=0.0;
@@ -70,7 +68,7 @@ double total_colonization_check(Grid* grid, Parameter *Initial_Parameter, vector
 				Patch *target = (*cell)[k];
 				for( int m = 0 ; m < M ; m++){
 					if(target->occupancy[m] == 0){
-						temp0 = total_colonization_rate(target , SpChar[m], grid, Initial_Parameter, max_l);
+						temp0 = total_colonization_rate(target, com[m], grid, Initial_Parameter, max_l);
 						//target->colonization[m] = temp0;
 						total_colonization+= temp0;
 					}
@@ -82,12 +80,11 @@ double total_colonization_check(Grid* grid, Parameter *Initial_Parameter, vector
 	return total_colonization;
 }
 
-double Total_colonization(Grid *grid, Parameter *param, vector<Species*> SpChar){
+double Total_colonization(Grid *grid, vector<Species*> com, Parameter *param, double max_l){
 
+	double M = param->get_M();
 	int ncell = grid->get_number_of_cells();
-	double temp0, total_colonization=0.0;
-	int M = param->get_M();
-	double max_l =SpChar[0]->get_l();
+	double temp0, total_colonization = 0.0;
 
 	for (int i= 0 ; i<ncell ; i++){
 		for ( int j = 0 ; j<ncell ; j++ ){
@@ -96,8 +93,8 @@ double Total_colonization(Grid *grid, Parameter *param, vector<Species*> SpChar)
 				Patch *target = (*cell)[k];
 				for( int m = 0 ; m < M ; m++){
 					if(target->occupancy[m] == 0){
-						temp0 = total_colonization_rate(target, SpChar[m], grid, param, max_l);
-						target->modify_col_patch(m,temp0);
+						temp0 = total_colonization_rate(target, com[m], grid, param, max_l);
+						target->modify_col_patch(m, temp0);
 						//target->colonization[m] = temp0;
 						total_colonization+= temp0;
 					}

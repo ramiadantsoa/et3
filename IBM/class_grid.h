@@ -12,7 +12,7 @@ class Grid {
         }
 
         ~Grid() {
-            for ( int i = 0; i < this->ncells; i++) { 
+            for ( int i = 0; i < this->ncells; i++) {
                 for (int j = 0; j < this->ncells; j++) {
                     vector<Patch*> *v = get_cell(i,j);
                     for(unsigned int k = 0; k < v->size(); k++) {
@@ -25,8 +25,8 @@ class Grid {
             delete[] this->cells;
         }
 
-        int get_number_of_cells() { 
-            return this->ncells; 
+        int get_number_of_cells() {
+            return this->ncells;
         }
 
         void add_patch(Patch *p) {
@@ -64,7 +64,7 @@ class Grid {
             }
             return number_of_patches;
         }
-    
+
         vector<uInt> count_species() {
             vector<uInt> count_vec(this->M, 0);
             for (int i = 0; i<ncells; i++) {
@@ -93,7 +93,7 @@ class Grid {
 		double colrate_per_grid (int i, int j){
 			double col_grid =0.0;
 			vector<Patch*> *patches = get_cell(i,j);
-            
+
 			for(unsigned int k = 0; k<patches->size(); k++) {
 				Patch *p = (*patches)[k];
                 for(int m = 0; m < this->M; m++) {
@@ -141,16 +141,17 @@ class Grid {
         vector<Patch*> *cells;
 };
 
-Grid *initialize(Parameter *param, double resourceDensity, vector<double> occupancyFractions, vector<Grain*> *habitat, Species *sp) {
+Grid *initialize(Parameter *param, double resourceDensity,
+  vector<double> occupancyFractions, vector<Grain*> *habitat, vector<Species*> com,
+  double max_ls) {
 	int ngrain = habitat->size(); // represent the number of forest patch that can produces resource unit
-	
+
 	int M = param->get_M();
 	double size =param->get_size();
-	double max_l=sp->get_l();
 
 	unsigned int npatches = get_poisson(resourceDensity*size*size);//initialize the number of resource units (called patches)
 
-	Grid *g = new Grid(size, max_l, M);
+	Grid *g = new Grid(size, max_ls, M);
 
     for (unsigned int i = 0; i<npatches; i++){
 
@@ -158,16 +159,16 @@ Grid *initialize(Parameter *param, double resourceDensity, vector<double> occupa
 		uInt chosen_grain = get_rand_integer(ngrain);
 
 		//cout<<" the chosen grain is " << chosen_grain<<endl;
-		
+
 		Grain *grain = (*habitat)[chosen_grain];
-		
+
 		double lambda =grain->get_lambda();
 		double x_pos =grain->get_x_pos();
 		double y_pos =grain->get_y_pos();
-		
+
         double _lambda = lambda*sqrt(get_random());
         double _angle = 2*PI*get_random();
-        
+
 		double x = x_pos +_lambda*cos(_angle);
 		if(x<0.0){
 			x+= size;
@@ -184,13 +185,13 @@ Grid *initialize(Parameter *param, double resourceDensity, vector<double> occupa
 			y-=size;
 		}
 
-		double q = param->get_aggeg()==1 ? grain->get_q(): get_random();
+		double q =  get_random_patch( grain->get_q(), param->get_aggreg());
 
 		//cout<<" patch quality "<< q<<endl;
 
-        Patch *p = new Patch(x,y,q,M);
+    Patch *p = new Patch(x, y, q, M, com);
 
-		//cout<< "x " << p->get_x() << " y " << p->get_y() << " q " << p->get_quality()<<" and fitness "<<p->get_fitness(1)<<"\n"; 
+		//cout<< "x " << p->get_x() << " y " << p->get_y() << " q " << p->get_quality()<<" and fitness "<<p->get_fitness(1)<<"\n";
 
         //INITIALIZE SPECIES OCCUPANCY
 		for (int m = 0; m < M; m++) {
