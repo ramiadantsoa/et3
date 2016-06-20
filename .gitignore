@@ -54,12 +54,11 @@ Supplementary_file.pdf
 *.bak
 *.exe
 #should ignore this or that folder
-analyses_fig/*/
-ms_fig/
-old_crap/
 
+*.csv
 *.jpg
 *.jpeg
+
 
 #specific files
 lifting_data.xlsx
