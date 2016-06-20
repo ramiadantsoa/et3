@@ -22,17 +22,18 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 	}
 
 	double MIN_TAU = 0.1;// 0.75; //this needs to be adjusted with pp and N_STEP_L
-	double pp = 1.15; //this is the power used to increment tau;
+	double MAX_TAU = 10;
+	//double pp = 1.15; //this is the power used to increment tau;
 
-	int N_STEP_T = 1; // number of discretization of tau
+	int N_STEP_T = 100; // number of discretization of tau
 
 	double tau;
 	// SIMLUATE ALL DIFFERENT LEVEL OF FRAGMENTATION AND DENSITY OF RESOURCE PRODUCTION
 
 		for(int j = 0; j < N_STEP_T ; j++){
-			//tau =(double) MAX_TAU*(j+1)/N_STEP_T;
+			tau =(double) MAX_TAU*(j+1)/N_STEP_T;
 			//tau = (double)  (m_MIN_TAU/(PI*lambda*lambda*gammaH))*pow(pp,j);
-			tau = (double) MIN_TAU*pow(pp,j);
+			// tau = (double) MIN_TAU*pow(pp,j);
 			//lambda = (double) MAX_LAMBDA*(i+1)/N_STEP_L;
 			convert<<tau<<"," <<lambda<<","<<gammaH;
 
@@ -52,7 +53,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			Grid *grid = initialize(Initial_Parameter, resource_density, prevalence, habitat, com, max_ls);
 			PatchPerGrid *ppg = initializePatchGrid(grid);
 
-	// 		//INITIALIZE COLONIZATION RATE AND COLONIZATION PER GRID
+			//INITIALIZE COLONIZATION RATE AND COLONIZATION PER GRID
 			double total_colonization = Total_colonization(grid, com, Initial_Parameter, max_ls);
 			ColonizationPerGrid *cpg= initializeColonizationGrid(grid);
 
