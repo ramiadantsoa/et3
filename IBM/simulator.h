@@ -104,12 +104,12 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 				goto end;
 			}
 
-			save_time_occupancy << ",{" << discrete_time;
-			for (int m = 1; m < M+1; m++) {
-				assert(var->fraction_occupancy(m)<=1. && var->fraction_occupancy(m)>=0.);
-				save_time_occupancy << ";" << var->fraction_occupancy(m);
-			}
-			save_time_occupancy <<"}";
+			// save_time_occupancy << ",{" << discrete_time;
+			// for (int m = 1; m < M+1; m++) {
+			// 	assert(var->fraction_occupancy(m)<=1. && var->fraction_occupancy(m)>=0.);
+			// 	save_time_occupancy << ";" << var->fraction_occupancy(m);
+			// }
+			// save_time_occupancy <<"}";
 
 
 			while(t<T && total_abundance != 0){
