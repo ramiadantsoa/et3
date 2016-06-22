@@ -218,7 +218,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 			end:
 
-			//grid->export_all_resource_units();
+			// grid->export_all_resource_units();
 
 			delete grid;
             /* Delete everything in habitat */
