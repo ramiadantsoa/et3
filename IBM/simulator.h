@@ -77,6 +77,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 			cout<<"number of resource units "<<npatches<<" initialization done\n";
 
+			double sum_occ = 0.0; //this is used to test if the species persist and is used very late (declare here to avoid cross initialization)
 			double t = 0.0;
 			double discrete_time = 0.0;
 			double step_time = 0.1;
@@ -208,6 +209,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 			output(grid);
 			for( int m = 0; m < M ; m++){
+				sum_occ += final_result[m+1];
 				final_result[m+1]= final_result[m+1]/final_result[0];
 				cout<<final_result[m+1]<<"\t";
 				save_final_occupancy<<","<<final_result[m+1];
@@ -227,8 +229,13 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			delete cpg;
 			delete ppg;
 			delete var;
+
+
+			/* CREATE A CONDITION SUCH THAT IF THE SPECIES PERSIST, THE SIMULATION ENDS*/
+			if(sum_occ > 0.) break;
 		} //for loop for tau closes
 	//}
+
 
 	double time_passed;
 	time_passed= clock();

@@ -61,7 +61,7 @@ boost::mt19937 rng(std::time(0));
 // typedef number<cpp_dec_float<100> > cpp_dec_float_100;
 
 int main(){
-	double z = 1.0, aggreg = 0.0, size = 12, simtime = 1000, muR = 0.1;
+	double z = 1.0, aggreg = 0.5, size = 12, simtime = 1000, muR = 0.1;
 	short int est = 1,  M = 1, replicates = 0, com_id = 1;
 	double lambda = 0.2, gammaH = 1.0;
 
