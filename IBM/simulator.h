@@ -2,9 +2,13 @@
 #define __SIMULATOR_H_
 
 void simulation(Parameter *Initial_Parameter, vector<Species*> com){
-	string valiny; //valiny stores the lambda, tau , gammaH, final result as a fraction of occupancy and the duration
+	string output_final_occupancy; //output_final_occupancy stores the lambda, tau , gammaH, final result as a fraction of occupancy and the duration
 
-	ostringstream convert;
+	ostringstream save_final_occupancy;
+
+	string output_time_occupancy; // stores the changes in occupancy through time
+
+	ostringstream save_time_occupancy;
 
 	//INITIALIZE SPECIES PARAMETER
 	int M = Initial_Parameter->get_M();
@@ -22,10 +26,10 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 	}
 
 	double MIN_TAU = 0.1;// 0.75; //this needs to be adjusted with pp and N_STEP_L
-	double MAX_TAU = 10;
+	double MAX_TAU = 5;
 	//double pp = 1.15; //this is the power used to increment tau;
 
-	int N_STEP_T = 100; // number of discretization of tau
+	int N_STEP_T = 10; // number of discretization of tau
 
 	double tau;
 	// SIMLUATE ALL DIFFERENT LEVEL OF FRAGMENTATION AND DENSITY OF RESOURCE PRODUCTION
@@ -35,10 +39,13 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			//tau = (double)  (m_MIN_TAU/(PI*lambda*lambda*gammaH))*pow(pp,j);
 			// tau = (double) MIN_TAU*pow(pp,j);
 			//lambda = (double) MAX_LAMBDA*(i+1)/N_STEP_L;
-			convert<<tau<<"," <<lambda<<","<<gammaH;
+			save_final_occupancy << tau << "," << lambda <<","<<gammaH;
 
 			cout<<"\n \n lambda is " <<lambda<< ", tau is "<< tau<< ", gammaH is "<< gammaH<<endl;
             cout.flush();
+
+			save_time_occupancy << tau <<"," << lambda << "," << gammaH;
+
 
 			//INITIALIZE HABITAT GRAIN: PATCHES LOCATION AND TYPE
 			vector<Grain*> *habitat = initialize_habitat(Initial_Parameter,gammaH, lambda);
@@ -71,6 +78,9 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			cout<<"number of resource units "<<npatches<<" initialization done\n";
 
 			double t = 0.0;
+			double discrete_time = 0.0;
+			double step_time = 0.1;
+
       int half_T = (int) floor(Initial_Parameter->get_T()/2);
 			double choose_event=0.0;
 			double total_event=0.0;
@@ -79,17 +89,30 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			vector<double> final_result(M+1);
 			for (int m = 0 ; m < M+1; m++) final_result[m]= 0.0;
 
+			uInt total_abundance = var->get_total_abundance();
+
 			if(npatches == 0){
+				save_time_occupancy << "{" << t;
 				for( int m = 0; m < M ; m++){
 					final_result[m+1]= 0.0;
 					cout<<final_result[m+1]<<"\t";
-					convert<<","<<final_result[m+1];
+					save_final_occupancy<<","<<final_result[m+1];
+					save_time_occupancy << ";" << final_result[m+1];
 				}
-				convert<<"\n";
+				save_final_occupancy<<"\n";
+				save_time_occupancy <<"} \n";
 				goto end;
 			}
 
-			while(t<T){
+			save_time_occupancy << ",{" << discrete_time;
+			for (int m = 1; m < M+1; m++) {
+				assert(var->fraction_occupancy(m)<=1. && var->fraction_occupancy(m)>=0.);
+				save_time_occupancy << ";" << var->fraction_occupancy(m);
+			}
+			save_time_occupancy <<"}";
+
+
+			while(t<T && total_abundance != 0){
 				total_event = var->get_birth()+ var->get_death() + var->get_col();//calculates the rate that an event happens
 				dt = get_exp(total_event);
 				t+=dt;
@@ -102,19 +125,23 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 					//double totcol = Total_colonization(grid, Initial_Parameter, SpChar);
 					//cout<<" total colonization var " << var->get_col() << " and from calculation " << totcol<<endl;
-				}else{
+				}
+				else{
 					if(choose_event <= var->get_birth()+var->get_death()) {
 					//cout<<"death \n ";
 					vector<uInt> chosen_death = select_patch_death(grid,ppg, var);
 					update_death(chosen_death, grid, ppg, cpg, Initial_Parameter, com,var);
 					npatches =grid->count_patches();
 					if(npatches == 0){
+						save_time_occupancy << "{" << discrete_time;
 						for( int m = 0; m < M ; m++){
 							final_result[m+1]= 0.0;
 							cout<<final_result[m+1]<<"\t";
-							convert<<","<<final_result[m+1];
+							save_final_occupancy<<","<<final_result[m+1];
+							save_time_occupancy << ";" << final_result[m+1];
 						}
-						convert<<"\n";
+						save_final_occupancy<<"\n";
+						save_time_occupancy<<"} \n";
 						goto end;
 					}
 
@@ -132,19 +159,36 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 					}
 				}
 
-				if(t > half_T + final_result[0] ){
+				// save_time_occupancy << "," << t;
+				if (discrete_time < t) {
+					save_time_occupancy <<",{ " << discrete_time;
+					for (int m = 1; m < M+1;  m++) {
+						assert(var->fraction_occupancy(m)<=1. && var->fraction_occupancy(m)>=0.);
+						save_time_occupancy << ";" << var->fraction_occupancy(m);
+					}
+					save_time_occupancy << "}";
+					discrete_time+= step_time;
+				}
+				// save_time_occupancy<<"\n";
+
+				total_abundance = var->get_total_abundance();
+
+				if(t > half_T + final_result[0] || total_abundance == 0 ){
 					//if (t < half_T+step+1){
 						//step+= 1.0;
 						for (int m = 0 ; m<M+1 ; m++){
-							assert(var->fraction_occupancy(m)<=1);
+							assert(var->fraction_occupancy(m)<=1.);
 							final_result[m]+= var->fraction_occupancy(m);//(double) var->get_temp_result(m+1)/var->get_temp_result(0);
 						}
 					//}
 				}
 
+
 				//for(int m = 0; m < M+1; m++) cout<< final_result[m]<<endl;
 
 			}//while closes
+
+			save_time_occupancy << "\n";
 
 			/*start testing if the colonization update works
 
@@ -161,17 +205,17 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 			end testing*/
 
-            cout << "Cleaning up\n";
-            cout.flush();
+      cout << "Cleaning up\n";
+      cout.flush();
 
 			//cout<< final_result[0]<<"\n";
 			output(grid);
 			for( int m = 0; m < M ; m++){
 				final_result[m+1]= final_result[m+1]/final_result[0];
 				cout<<final_result[m+1]<<"\t";
-				convert<<","<<final_result[m+1];
+				save_final_occupancy<<","<<final_result[m+1];
 			}
-			convert<<"\n";
+			save_final_occupancy<<"\n";
 
 			end:
 
@@ -200,23 +244,31 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 	cout<<"\n sim time is : " << time_passed/CLOCKS_PER_SEC << "seconds "<<endl;
 
-	convert<<"\n "<<time_passed/CLOCKS_PER_SEC<<endl;
+	save_final_occupancy<<"\n "<<time_passed/CLOCKS_PER_SEC<<endl;
 
-	valiny.append(convert.str());
+	output_final_occupancy.append(save_final_occupancy.str());
+	output_time_occupancy.append(save_time_occupancy.str());
 
-	ostringstream ltau;
-	string addname;
+	// ostringstream ltau;
+	// string addname;
 
 	//ltau<<"_l_"<<lambda<<"_tau_"<<tau<<"_w_"<<w<<".csv";
 	//  ltau<<".csv";
 	// addname = ltau.str();
 	string filename = Initial_Parameter->get_name().append(".csv");
+	string filename2 = Initial_Parameter->get_name().append(".csv").insert(0,"time_occ_");
 	// string filename = Initial_Parameter->get_name().append(addname);
 
-	ofstream myfile;
-	myfile.open (filename.c_str());
-	myfile << valiny;
-	myfile.close();
+	ofstream final_occ;
+	final_occ.open (filename.c_str());
+	final_occ << output_final_occupancy;
+	final_occ.close();
+
+
+	ofstream time_occ;
+	time_occ.open(filename2.c_str());
+	time_occ << output_time_occupancy;
+	time_occ.close();
 }//simulator closes
 
 

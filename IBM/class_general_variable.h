@@ -69,6 +69,14 @@ public:
 		return (double) this->temp_result[i]/this->temp_result[0];
 	}
 
+	uInt get_total_abundance(){
+		uInt total_abund = 0.;
+		for (int i = 1; i < this->M+1; i++) {
+			total_abund+= this->temp_result[i];
+		}
+		return total_abund;
+	}
+
 };
 
 

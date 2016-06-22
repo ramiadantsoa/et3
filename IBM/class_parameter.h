@@ -76,7 +76,7 @@ public:
 
 	string get_name(){
 		ostringstream tostring;
-		string est =establishment==1? "Est" : "Fec";
+		string est =establishment==1? "est" : "fec";
 		tostring<<"sim_"<<est<<"_z_"<<this->z<<"_aggreg_"<<this->resource_aggreg
 		<<"_M_"<<this->M<<"_com_id_"<<com_id<<"_size_"<<this->size<<"_T_"<<this->T<<"_muR_"<<this->muR
 		<<"_lambda_"<<this->lambda << "_gH_" << this->gammaH <<"_replicates_"
