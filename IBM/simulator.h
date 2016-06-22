@@ -29,7 +29,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 	double MAX_TAU = 5;
 	//double pp = 1.15; //this is the power used to increment tau;
 
-	int N_STEP_T = 10; // number of discretization of tau
+	int N_STEP_T = 100; // number of discretization of tau
 
 	double tau;
 	// SIMLUATE ALL DIFFERENT LEVEL OF FRAGMENTATION AND DENSITY OF RESOURCE PRODUCTION
@@ -119,16 +119,16 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 				choose_event= total_event*get_random();
 
 				if(choose_event <= var->get_birth()) {
-					//cout<<"birth \n";
+					// cout<<"birth \n";
 					Patch *new_p = new_patch(habitat,Initial_Parameter, lambda, com);
 					update_birth(new_p, grid, ppg, cpg,Initial_Parameter, com, var, max_ls);
 
-					//double totcol = Total_colonization(grid, Initial_Parameter, SpChar);
-					//cout<<" total colonization var " << var->get_col() << " and from calculation " << totcol<<endl;
+					// double totcol_b = total_colonization_check(grid, com,  Initial_Parameter,  max_ls);
+					// cout<<" birth total colonization var " << var->get_col() << " and from calculation " << totcol_b<<endl;
 				}
 				else{
-					if(choose_event <= var->get_birth()+var->get_death()) {
-					//cout<<"death \n ";
+					if(choose_event <= var->get_birth() + var->get_death()) {
+					// cout<<"death \n ";
 					vector<uInt> chosen_death = select_patch_death(grid,ppg, var);
 					update_death(chosen_death, grid, ppg, cpg, Initial_Parameter, com,var);
 					npatches =grid->count_patches();
@@ -145,17 +145,17 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 						goto end;
 					}
 
-					//double totcol = Total_colonization(grid, Initial_Parameter, SpChar);
-					//cout<<" total colonization var " << var->get_col() << " and from calculation " << totcol<<endl;
+					// double totcol_d = total_colonization_check(grid, com,  Initial_Parameter, max_ls);
+					// cout<<" death total colonization var " << var->get_col() << " and from calculation " << totcol_d<<endl;
 					}
 					else {
-					//cout<<"colonization \n " ;
+						// cout<<"colonization \n " ;
 					vector<uInt> chosen_col = select_patch_col(grid, cpg,var,M);
 					update_colonization(chosen_col, grid, cpg, Initial_Parameter, var);
 					update_colonization_rest(chosen_col, grid, cpg, Initial_Parameter, com, var);
 
-					//double totcol = Total_colonization(grid, Initial_Parameter, SpChar);
-					//cout<<" total colonization var " << var->get_col() << " and from calculation " << totcol<<endl;
+					// double totcol_c = total_colonization_check(grid, com , Initial_Parameter, max_ls);
+					// cout<<" colonization total colonization var " << var->get_col() << " and from calculation " << totcol_c<<endl;
 					}
 				}
 
@@ -183,7 +183,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 					//}
 				}
 
-
+				//system("read");
 				//for(int m = 0; m < M+1; m++) cout<< final_result[m]<<endl;
 
 			}//while closes

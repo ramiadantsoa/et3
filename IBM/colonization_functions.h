@@ -54,31 +54,31 @@ double total_colonization_rate(Patch *target, Species *sp, Grid *g, Parameter *p
 	return result;
 }
 
-double total_colonization_check(Grid* grid, Parameter *Initial_Parameter, vector<Species*> com, double max_l){
-	int ncell = grid->get_number_of_cells();
-	int M = Initial_Parameter->get_M();
-
-	double temp0;
-	double total_colonization=0.0;
-
-	for (int i= 0 ; i<ncell ; i++){
-		for ( int j = 0 ; j<ncell ; j++ ){
-			vector<Patch*> *cell = grid->get_cell(i,j);
-			for(unsigned int k = 0 ; k < cell->size() ; k++ ){
-				Patch *target = (*cell)[k];
-				for( int m = 0 ; m < M ; m++){
-					if(target->occupancy[m] == 0){
-						temp0 = total_colonization_rate(target, com[m], grid, Initial_Parameter, max_l);
-						//target->colonization[m] = temp0;
-						total_colonization+= temp0;
-					}
-				}
-			}
-		}
-	}
-
-	return total_colonization;
-}
+// double total_colonization_check(Grid* grid, vector<Species*> com, Parameter *Initial_Parameter,  double max_l){
+// 	int ncell = grid->get_number_of_cells();
+// 	int M = Initial_Parameter->get_M();
+//
+// 	double temp0;
+// 	double total_colonization=0.0;
+//
+// 	for (int i= 0 ; i<ncell ; i++){
+// 		for ( int j = 0 ; j<ncell ; j++ ){
+// 			vector<Patch*> *cell = grid->get_cell(i,j);
+// 			for(unsigned int k = 0 ; k < cell->size() ; k++ ){
+// 				Patch *target = (*cell)[k];
+// 				for( int m = 0 ; m < M ; m++){
+// 					if(target->occupancy[m] == 0){
+// 						temp0 = total_colonization_rate(target, com[m], grid, Initial_Parameter, max_l);
+// 						//target->colonization[m] = temp0;
+// 						total_colonization+= temp0;
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+//
+// 	return total_colonization;
+// }
 
 double Total_colonization(Grid *grid, vector<Species*> com, Parameter *param, double max_l){
 
