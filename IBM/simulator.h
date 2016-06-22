@@ -41,7 +41,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			//lambda = (double) MAX_LAMBDA*(i+1)/N_STEP_L;
 			save_final_occupancy << tau << "," << lambda <<","<<gammaH;
 
-			cout<<"\n \n lambda is " <<lambda<< ", tau is "<< tau<< ", gammaH is "<< gammaH<<endl;
+			cout<<"\n \nlambda is " <<lambda<< ", tau is "<< tau<< ", gammaH is "<< gammaH<<endl;
             cout.flush();
 
 			save_time_occupancy << tau <<"," << lambda << "," << gammaH;
@@ -159,7 +159,6 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 					}
 				}
 
-				// save_time_occupancy << "," << t;
 				if (discrete_time < t) {
 					save_time_occupancy <<",{ " << discrete_time;
 					for (int m = 1; m < M+1;  m++) {
@@ -169,7 +168,6 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 					save_time_occupancy << "}";
 					discrete_time+= step_time;
 				}
-				// save_time_occupancy<<"\n";
 
 				total_abundance = var->get_total_abundance();
 
@@ -208,7 +206,6 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
       cout << "Cleaning up\n";
       cout.flush();
 
-			//cout<< final_result[0]<<"\n";
 			output(grid);
 			for( int m = 0; m < M ; m++){
 				final_result[m+1]= final_result[m+1]/final_result[0];
@@ -232,12 +229,6 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			delete var;
 		} //for loop for tau closes
 	//}
-
-    /* Free the species */
-
-    //for(int m=0 ; m < M ; m++){
-    //    delete com[m];
-    //}
 
 	double time_passed;
 	time_passed= clock();
