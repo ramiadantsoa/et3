@@ -34,10 +34,10 @@ double get_random(){
  return rand();
 }
 
-// Generate a random number between -x1 and x1
+// Generate a random number between -aggreg and aggreg
 double get_random_patch(double grain_q, double aggreg){
   double patch_q;
-  double y = grain_q + aggreg*(2*get_random() - 1);
+  double y = grain_q + aggreg*(2*get_random() - 1); // map (0,1) to (-aggreg + grain_q, aggreg + grain_q))
   patch_q = fmod(y + 1, 1);
  return patch_q;
 }
