@@ -61,8 +61,8 @@ boost::mt19937 rng(std::time(0));
 // typedef number<cpp_dec_float<100> > cpp_dec_float_100;
 
 int main(){
-	double z = 1.0, aggreg = 0.5, size = 12, simtime = 10, muR = 0.1;
-	short int est = 1,  M = 1, max_repl = 10, com_id = 1;
+	double z = 1.0, aggreg = 0.0, size = 12, simtime = 4000, muR = 0.1;
+	short int est = 1,  M = 1, replicates = 0, com_id = 1;
 	double lambda = 0.2, gammaH = 1.0;
 
   std::time_t seed_time = std::time(0);
@@ -88,12 +88,17 @@ int main(){
 	// std::cout << "\nM ";
 	// std::cin >> M;
 
-	int NU = 4;
+	int NU = 30;
 	for (int nn = 0; nn < NU; nn++) {
 
 		// std::cout << "\nenter community ID ";
 		com_id = nn;
 		// std::cin >> com_id;
+
+		Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
+			size, simtime, replicates);
+
+		short int rep = 0;
 
 		// Enter species parameters
 		double pp = 1.35; // discretization of nu
@@ -125,17 +130,12 @@ int main(){
 			com[i] = sp;
 		}
 
-		for (int repl = 0; repl < max_repl; repl++) {
-			Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
-				size, simtime, repl);
+		simulation(param,com);
 
-			simulation(param,com);
-
-			delete param;
-		} // for loop on replicates
-			for(int i=0 ; i < M ; i++){
-				delete com[i]; // = sp;
-			}
+		delete param;
+		for(int i=0 ; i < M ; i++){
+			delete com[i]; // = sp;
+		}
 	} //for NU closes
 
 	return 0;
