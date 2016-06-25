@@ -26,7 +26,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 	}
 
 	double MIN_TAU = 0.1;// 0.75; //this needs to be adjusted with pp and N_STEP_L
-	double MAX_TAU = 5;
+	double MAX_TAU = 10;
 	//double pp = 1.15; //this is the power used to increment tau;
 
 	int N_STEP_T = 100; // number of discretization of tau
@@ -80,7 +80,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 			double sum_occ = 0.0; //this is used to test if the species persist and is used very late (declare here to avoid cross initialization)
 			double t = 0.0;
 			double discrete_time = 0.0;
-			double step_time = 0.1;
+			double step_time = 1.0; // for transient time, occupancy is recorded for each  time unit.
 
       int half_T = (int) floor(Initial_Parameter->get_T()/2);
 			double choose_event=0.0;

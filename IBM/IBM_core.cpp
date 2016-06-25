@@ -61,7 +61,7 @@ boost::mt19937 rng(std::time(0));
 // typedef number<cpp_dec_float<100> > cpp_dec_float_100;
 
 int main(){
-	double z = 1.0, aggreg = 0.5, size = 12, simtime = 1000, muR = 0.1;
+	double z = 1.0, aggreg = 0.0, size = 12, simtime = 4000, muR = 0.1;
 	short int est = 1,  M = 1, replicates = 0, com_id = 1;
 	double lambda = 0.2, gammaH = 1.0;
 
@@ -95,10 +95,8 @@ int main(){
 		com_id = nn;
 		// std::cin >> com_id;
 
-		Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
-			size, simtime, replicates);
 
-		short int rep = 0;
+		// short int rep = 0;
 
 		// Enter species parameters
 		double pp = 1.35; // discretization of nu
@@ -130,9 +128,13 @@ int main(){
 			com[i] = sp;
 		}
 
-		simulation(param,com);
+		for (int rep = 0; rep < 10; rep++) {
+			Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
+				size, simtime, replicates);
+			simulation(param,com);
+			delete param;
+	}
 
-		delete param;
 		for(int i=0 ; i < M ; i++){
 			delete com[i]; // = sp;
 		}
