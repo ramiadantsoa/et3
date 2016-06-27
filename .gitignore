@@ -54,6 +54,7 @@ Supplementary_file.pdf
 *.bak
 *.exe
 #should ignore this or that folder
+sim1/
 
 *.csv
 *.jpg

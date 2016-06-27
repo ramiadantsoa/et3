@@ -81,8 +81,8 @@ int main(){
 	// // Model types
 	// std::cout << "\nenter competition ";
 	// std::cin >> z;
-	// std::cout << "\nenter aggregation ";
-	// std::cin >> aggreg;
+	std::cout << "\nenter aggregation ";
+	std::cin >> aggreg;
 	//
 	// // Enter community size and id
 	// std::cout << "\nM ";
