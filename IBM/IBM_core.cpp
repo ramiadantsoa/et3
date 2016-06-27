@@ -95,6 +95,8 @@ int main(){
 		com_id = nn;
 		// std::cin >> com_id;
 
+		// Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
+			// size, simtime, replicates);
 
 		// short int rep = 0;
 
