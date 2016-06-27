@@ -130,7 +130,7 @@ int main(){
 
 		for (int rep = 0; rep < 10; rep++) {
 			Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
-				size, simtime, replicates);
+				size, simtime, rep);
 			simulation(param,com);
 			delete param;
 	}
