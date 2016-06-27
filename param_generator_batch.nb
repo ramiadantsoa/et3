@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      6744,        182]
-NotebookOptionsPosition[      6248,        160]
-NotebookOutlinePosition[      6590,        175]
-CellTagsIndexPosition[      6547,        172]
+NotebookDataLength[      9253,        224]
+NotebookOptionsPosition[      8936,        209]
+NotebookOutlinePosition[      9278,        224]
+CellTagsIndexPosition[      9235,        221]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -21,82 +21,168 @@ Notebook[{
 Cell[BoxData[
  RowBox[{
   RowBox[{
-  "localfolder", " ", "=", " ", 
-   "\"\<Z:\\\\otso_param_l_0.5_add_muR_0.2\\\\\>\""}], ";"}]], "Input",
+  "sdir", " ", "=", " ", 
+   "\"\<C:\\\\Users\\\\tramiada\\\\Documents\\\\Projects\\\\et3\\\\IBM\\\\\>\"\
+"}], ";"}]], "Input",
  CellChangeTimes->{{3.6467607413949547`*^9, 3.646760759484763*^9}, 
-   3.646764299084454*^9, {3.6754389332854667`*^9, 3.675438934715481*^9}}],
+   3.646764299084454*^9, {3.6754389332854667`*^9, 3.675438934715481*^9}, {
+   3.676054377235319*^9, 3.6760543786194572`*^9}, {3.676054482023797*^9, 
+   3.6760545138519793`*^9}}],
 
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{
-  RowBox[{
+  RowBox[{"M", " ", "=", " ", "5"}], ";", " ", 
+  RowBox[{"size", " ", "=", " ", "3"}], ";", " ", 
+  RowBox[{"lambda", " ", "=", " ", "0.1"}], ";", " ", 
+  RowBox[{"simtime", " ", "=", " ", "10"}], ";", " ", 
+  RowBox[{"comID", " ", "=", " ", "5"}], ";", " ", 
+  RowBox[{"cola", " ", "=", " ", "0.5"}], ";", " ", 
+  RowBox[{"nu", " ", "=", " ", "0.125"}], ";", " ", 
+  RowBox[{"ls", " ", "=", " ", "0.5"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"for", " ", "landscape"}], " ", "*)"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"Do", "[", "\[IndentingNewLine]", 
-      RowBox[{"(*", 
-       RowBox[{"for", " ", "landscape"}], " ", "*)"}], "\[IndentingNewLine]", 
-      RowBox[{
+     RowBox[{"input1", " ", "=", " ", 
+      RowBox[{"{", 
        RowBox[{
-        RowBox[{"input1", " ", "=", " ", 
-         RowBox[{"{", 
-          RowBox[{
-          "size", ",", " ", "lambda", ",", " ", "gammaH", ",", " ", 
-           "simtime"}], "}"}]}], ";", "\[IndentingNewLine]", 
-        "\[IndentingNewLine]", 
-        RowBox[{"(*", 
-         RowBox[{"for", " ", "model"}], " ", "*)"}], "\[IndentingNewLine]", 
-        RowBox[{"input2", " ", "=", " ", 
-         RowBox[{"{", 
-          RowBox[{"z", ",", " ", "aggreg", ",", " ", "M", ",", " ", "comID"}],
-           "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-        RowBox[{"(*", 
-         RowBox[{"For", " ", "community"}], "*)"}], "\[IndentingNewLine]", 
-        RowBox[{"input3", " ", "=", " ", 
-         RowBox[{"Table", "[", 
-          RowBox[{
-           RowBox[{"{", 
-            RowBox[{
-            "cola", ",", " ", "optq", ",", " ", "nu", ",", " ", "ls"}], "}"}],
-            ",", " ", 
-           RowBox[{"{", 
-            RowBox[{"i", ",", "M"}], "}"}]}], "]"}]}], ";", 
-        "\[IndentingNewLine]", "\[IndentingNewLine]", 
-        RowBox[{"INPUT", " ", "=", " ", 
-         RowBox[{"Flatten", "[", 
-          RowBox[{"{", 
-           RowBox[{"input1", ",", "input2", ",", "input3"}], "}"}], "]"}]}], 
-        ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-        RowBox[{"outname", " ", "=", " ", 
-         RowBox[{"localfolder", "<>", "\"\<input_z_\>\"", "<>", 
-          RowBox[{"ToString", "@", "z"}], "<>", "\"\<_aggreg_\>\"", "<>", 
-          RowBox[{"ToString", "@", "aggreg"}], "<>", "\"\<_lambda_\>\"", "<>", 
-          RowBox[{"ToString", "@", "lambda"}], "<>", "\"\<_gH_\>\""}]}]}], 
-       ",", 
-       RowBox[{"ToString", "@", "gammaH"}], ",", "\"\<.txt\>\""}], "]"}], 
-     ";"}], "\[IndentingNewLine]", 
-    RowBox[{
+       "size", ",", " ", "lambda", ",", " ", "gammaH", ",", " ", "simtime"}], 
+       "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"for", " ", "model"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"input2", " ", "=", " ", 
+      RowBox[{"{", 
+       RowBox[{"z", ",", " ", "aggreg", ",", " ", "M", ",", " ", "comID"}], 
+       "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"For", " ", "community"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"input3", " ", "=", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"cola", ",", " ", 
+          RowBox[{"1.", "/", "M"}], ",", " ", "nu", ",", " ", "ls"}], "}"}], 
+        ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "M"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"INPUT", " ", "=", " ", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"{", 
+        RowBox[{"input1", ",", "input2", ",", "input3"}], "}"}], "]"}]}], ";",
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"outname", " ", "=", " ", 
+      RowBox[{"sdir", "<>", "\"\<input_z_\>\"", "<>", 
+       RowBox[{"ToString", "@", "z"}], "<>", "\"\<_aggreg_\>\"", "<>", 
+       RowBox[{"ToString", "@", "aggreg"}], "<>", "\"\<_lambda_\>\"", "<>", 
+       RowBox[{"ToString", "@", "lambda"}], "<>", "\"\<_gH_\>\"", "<>", 
+       RowBox[{"ToString", "@", "gammaH"}], "<>", "\"\<.txt\>\""}]}], ";", 
+     "\[IndentingNewLine]", 
      RowBox[{"Export", "[", 
-      RowBox[{"outname", ",", "out"}], "]"}], ";"}], "\[IndentingNewLine]", 
-    RowBox[{
+      RowBox[{"outname", ",", "INPUT"}], "]"}], ";", "\[IndentingNewLine]", 
      RowBox[{"batch", " ", "=", " ", 
       RowBox[{"{", 
        RowBox[{"\"\<@echo off\>\"", ",", "\"\<\>\"", ",", 
         RowBox[{
-        "sdir", "<>", "\"\<Task_38_robust.exe\>\"", "<>", " ", "\"\< < \>\"", 
-         "<>", " ", "outname"}], ",", "\"\<\>\""}], "}"}]}], ";"}], 
-    "\[IndentingNewLine]", 
-    RowBox[{
+        "sdir", "<>", "\"\<sim2.exe\>\"", "<>", " ", "\"\< < \>\"", "<>", " ",
+          "outname"}], ",", "\"\<\>\""}], "}"}]}], ";", "\[IndentingNewLine]", 
      RowBox[{"boutname", " ", "=", " ", 
-      RowBox[{"StringJoin", "[", 
-       RowBox[{
-       "sdir", ",", "\"\<bat_\>\"", ",", "est", ",", "\"\<_input_z_\>\"", ",",
-         "z", ",", "\"\<_aggreg_\>\"", ",", "aggreg", ",", "\"\<_gH_\>\"", 
-        ",", 
-        RowBox[{"ToString", "@", "gammaH"}], ",", "\"\<.txt\>\""}], "]"}]}], 
-     ";"}], "\[IndentingNewLine]", 
-    RowBox[{
+      RowBox[{"sdir", "<>", "\"\<bat_\>\"", "<>", 
+       RowBox[{"ToString", "@", "est"}], "<>", "\"\<_input_z_\>\"", "<>", 
+       RowBox[{"ToString", "@", "z"}], "<>", "\"\<_aggreg_\>\"", "<>", 
+       RowBox[{"ToString", "@", "aggreg"}], "<>", "\"\<_gH_\>\"", "<>", 
+       RowBox[{"ToString", "@", "gammaH"}], "<>", "\"\<.txt\>\""}]}], ";", 
+     "\[IndentingNewLine]", 
      RowBox[{"Export", "[", 
-      RowBox[{"boutname", ",", "batch"}], "]"}], ";"}], "\[IndentingNewLine]", 
-    RowBox[{",", 
+      RowBox[{"boutname", ",", "batch"}], "]"}], ";"}], "\[IndentingNewLine]",
+     ",", 
+    RowBox[{"{", 
+     RowBox[{"est", ",", 
+      RowBox[{"{", "\"\<1\>\"", "}"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"z", ",", 
+      RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"aggreg", ",", 
+      RowBox[{"{", "0", "}"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"gammaH", ",", 
+      RowBox[{"{", "1", "}"}]}], "}"}]}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.64676077805462*^9, 3.6467609451263256`*^9}, {
+   3.6467612290677166`*^9, 3.6467613761949787`*^9}, {3.6467614153882885`*^9, 
+   3.6467615024429936`*^9}, {3.6467615328060293`*^9, 3.646761850312908*^9}, {
+   3.646764375337078*^9, 3.646764569378481*^9}, {3.6467652370172377`*^9, 
+   3.6467652375362897`*^9}, 3.6754389966351795`*^9, {3.675439027745863*^9, 
+   3.6754393682487497`*^9}, 3.6760541995545526`*^9, {3.6760544683264275`*^9, 
+   3.676054502136808*^9}, {3.676054532548849*^9, 3.6760546588864813`*^9}, {
+   3.676054693568949*^9, 3.6760547363142233`*^9}, {3.6760549917237616`*^9, 
+   3.6760550216867576`*^9}, {3.6760550738509736`*^9, 3.676055101547743*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"for", " ", "landscape"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"input1", " ", "=", " ", 
+      RowBox[{"{", 
+       RowBox[{
+       "size", ",", " ", "lambda", ",", " ", "gammaH", ",", " ", "simtime"}], 
+       "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"for", " ", "model"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"input2", " ", "=", " ", 
+      RowBox[{"{", 
+       RowBox[{"z", ",", " ", "aggreg", ",", " ", "M", ",", " ", "comID"}], 
+       "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{"For", " ", "community"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"input3", " ", "=", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"cola", ",", " ", "optq", ",", " ", "nu", ",", " ", "ls"}], 
+         "}"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "M"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"INPUT", " ", "=", " ", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"{", 
+        RowBox[{"input1", ",", "input2", ",", "input3"}], "}"}], "]"}]}], ";",
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"outname", " ", "=", " ", 
+      RowBox[{"localfolder", "<>", "\"\<input_z_\>\"", "<>", 
+       RowBox[{"ToString", "@", "z"}], "<>", "\"\<_aggreg_\>\"", "<>", 
+       RowBox[{"ToString", "@", "aggreg"}], "<>", "\"\<_lambda_\>\"", "<>", 
+       RowBox[{"ToString", "@", "lambda"}], "<>", "\"\<_gH_\>\""}]}]}], ",", 
+    RowBox[{"ToString", "@", "gammaH"}], ",", "\"\<.txt\>\""}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{"outname", ",", "out"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"batch", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"\"\<@echo off\>\"", ",", "\"\<\>\"", ",", 
+     RowBox[{
+     "sdir", "<>", "\"\<Task_38_robust.exe\>\"", "<>", " ", "\"\< < \>\"", "<>",
+       " ", "outname"}], ",", "\"\<\>\""}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"boutname", " ", "=", " ", 
+   RowBox[{"StringJoin", "[", 
+    RowBox[{
+    "sdir", ",", "\"\<bat_\>\"", ",", "est", ",", "\"\<_input_z_\>\"", ",", 
+     "z", ",", "\"\<_aggreg_\>\"", ",", "aggreg", ",", "\"\<_gH_\>\"", ",", 
+     RowBox[{"ToString", "@", "gammaH"}], ",", 
+     RowBox[{"\"\<.txt\>\"", ";", "\[IndentingNewLine]", 
+      RowBox[{"Export", "[", 
+       RowBox[{"boutname", ",", "batch"}], "]"}], ";"}], 
+     "\[IndentingNewLine]", ",", 
      RowBox[{"{", 
       RowBox[{"est", ",", 
        RowBox[{"{", 
@@ -112,51 +198,14 @@ Cell[BoxData[
      RowBox[{"{", 
       RowBox[{"gammaH", ",", 
        RowBox[{"{", 
-        RowBox[{"0.5", ",", "1", ",", "2"}], "}"}]}], "}"}]}]}], "]"}], 
-  ";"}]], "Input",
+        RowBox[{"0.5", ",", "1", ",", "2"}], "}"}]}], "}"}]}], "]"}]}], 
+  ";"}]}], "Input",
  CellChangeTimes->{{3.64676077805462*^9, 3.6467609451263256`*^9}, {
    3.6467612290677166`*^9, 3.6467613761949787`*^9}, {3.6467614153882885`*^9, 
    3.6467615024429936`*^9}, {3.6467615328060293`*^9, 3.646761850312908*^9}, {
    3.646764375337078*^9, 3.646764569378481*^9}, {3.6467652370172377`*^9, 
    3.6467652375362897`*^9}, 3.6754389966351795`*^9, {3.675439027745863*^9, 
-   3.6754393682487497`*^9}}],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"PowerRange", "[", 
-  RowBox[{"0.002", ",", "10", ",", "1.35"}], "]"}]], "Input",
- CellChangeTimes->{{3.675440124651476*^9, 3.6754401786389923`*^9}}],
-
-Cell[BoxData[
- RowBox[{"{", 
-  RowBox[{
-  "0.0020000000000000005`", ",", "0.0027`", ",", "0.0036450000000000024`", 
-   ",", "0.004920750000000002`", ",", "0.006643012500000007`", ",", 
-   "0.008968066875000007`", ",", "0.012106890281250006`", ",", 
-   "0.01634430187968752`", ",", "0.022064807537578147`", ",", 
-   "0.029787490175730503`", ",", "0.040213111737236185`", ",", 
-   "0.054287700845268835`", ",", "0.07328839614111295`", ",", 
-   "0.0989393347905025`", ",", "0.13356810196717833`", ",", 
-   "0.18031693765569087`", ",", "0.2434278658351826`", ",", 
-   "0.3286276188774964`", ",", "0.44364728548462046`", ",", 
-   "0.5989238354042374`", ",", "0.808547177795721`", ",", 
-   "1.0915386900242232`", ",", "1.473577231532701`", ",", 
-   "1.9893292625691474`", ",", "2.6855945044683485`", ",", 
-   "3.6255525810322697`", ",", "4.894495984393567`", ",", "6.60756957893132`",
-    ",", "8.92021893155727`"}], "}"}]], "Output",
- CellChangeTimes->{{3.6754401603972626`*^9, 3.6754401788189993`*^9}}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"Length", "@", "%"}]], "Input",
- CellChangeTimes->{{3.6754401637373962`*^9, 3.6754401695686293`*^9}}],
-
-Cell[BoxData["29"], "Output",
- CellChangeTimes->{{3.6754401700786495`*^9, 3.675440179529028*^9}}]
-}, Open  ]]
+   3.6754393682487497`*^9}, 3.676054204258023*^9}]
 },
 WindowSize->{944, 1102},
 WindowMargins->{{Automatic, 0}, {Automatic, 0}},
@@ -174,16 +223,9 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 281, 6, 31, "Input"],
-Cell[842, 28, 3931, 93, 412, "Input"],
-Cell[CellGroupData[{
-Cell[4798, 125, 172, 3, 31, "Input"],
-Cell[4973, 130, 998, 17, 72, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[6008, 152, 124, 2, 31, "Input"],
-Cell[6135, 156, 97, 1, 31, "Output"]
-}, Open  ]]
+Cell[558, 20, 408, 9, 31, "Input"],
+Cell[969, 31, 4273, 89, 432, "Input"],
+Cell[5245, 122, 3687, 85, 412, "Input"]
 }
 ]
 *)

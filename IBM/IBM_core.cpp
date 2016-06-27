@@ -62,33 +62,33 @@ boost::mt19937 rng(std::time(0));
 
 int main(){
 	double z = 1.0, aggreg = 0.0, size = 12, simtime = 4000, muR = 0.1;
-	short int est = 1,  M = 1, replicates = 0, com_id = 1;
+	short int est = 1,  M = 1, com_id = 1;
 	double lambda = 0.2, gammaH = 1.0;
 
   std::time_t seed_time = std::time(0);
   rng.seed(seed_time);
 
 	// Parameter input
-	// std::cout << "enter size ";
-	// std::cin >> size;
-	// std::cout << " \nenter patch size ";
-	// std::cin >> lambda;
-	// std::cout << " \nenter patch density ";
-	// std::cin >> gammaH;
-	// std::cout << "\nenter time ";
-	// std::cin >> simtime;
-	//
-	// // Model types
-	// std::cout << "\nenter competition ";
-	// std::cin >> z;
-	// std::cout << "\nenter aggregation ";
-	// std::cin >> aggreg;
-	//
-	// // Enter community size and id
-	// std::cout << "\nM ";
-	// std::cin >> M;
+	std::cout << "enter size ";
+	std::cin >> size;
+	std::cout << " \nenter patch size ";
+	std::cin >> lambda;
+	std::cout << " \nenter patch density ";
+	std::cin >> gammaH;
+	std::cout << "\nenter time ";
+	std::cin >> simtime;
 
-	int NU = 30;
+	// Model types
+	std::cout << "\nenter competition ";
+	std::cin >> z;
+	std::cout << "\nenter aggregation ";
+	std::cin >> aggreg;
+
+	// Enter community size and id
+	std::cout << "\nM ";
+	std::cin >> M;
+
+	int NU = 1;
 	for (int nn = 0; nn < NU; nn++) {
 
 		// std::cout << "\nenter community ID ";
@@ -101,22 +101,22 @@ int main(){
 		// short int rep = 0;
 
 		// Enter species parameters
-		double pp = 1.35; // discretization of nu
+		// double pp = 1.35; // discretization of nu
 		std::vector<double> pre_com(M*5);
 		for (int i = 0; i < M; i++) {
 
-			// std::cout << "\nenter colonization rate ";
-			// std::cin >> pre_com[5*i] ; //colonization rate
-			pre_com[5*i] = 0.5 ; //colonization rate
-			// std::cout << "\nenter optimal q ";
-			// std::cin >> pre_com[5*i+1] ; //optimal q
-			pre_com[5*i+1] = 0.5 ; //optimal q
-			// std::cout << "\nenter niche width ";
-			// std::cin >> pre_com[5*i+2]; // niche width nu, by convention, nu = -1 for generalist
-			pre_com[5*i+2] = nn == 29 ? -1 : 0.002*pow(pp,nn); // niche width nu, by convention, nu = -1 for generalist
-			// std::cout << "\nenter dispersal range ";
-			// std::cin >> pre_com[5*i+3]; // dispersal range
-			pre_com[5*i+3] = 0.5; // dispersal range
+			std::cout << "\nenter colonization rate ";
+			std::cin >> pre_com[5*i] ; //colonization rate
+			// pre_com[5*i] = 0.5 ; //colonization rate
+			std::cout << "\nenter optimal q ";
+			std::cin >> pre_com[5*i+1] ; //optimal q
+			// pre_com[5*i+1] = 0.5 ; //optimal q
+			std::cout << "\nenter niche width ";
+			std::cin >> pre_com[5*i+2]; // niche width nu, by convention, nu = -1 for generalist
+			// pre_com[5*i+2] = nn == 29 ? -1 : 0.002*pow(pp,nn); // niche width nu, by convention, nu = -1 for generalist
+			std::cout << "\nenter dispersal range ";
+			std::cin >> pre_com[5*i+3]; // dispersal range
+			// pre_com[5*i+3] = 0.5; // dispersal range
 			pre_com[5*i+4] = i; // species id
 
 		}
@@ -125,12 +125,12 @@ int main(){
 		//INITIALIZE SPECIES CHARACTERISTICS
 		vector<Species*> com(M);
 		/* order of variable col, optimal q, nu, and dispersal */
-		for(int i=0 ; i < M ; i++){
+		for(int i = 0 ; i < M ; i++){
 			Species *sp = new Species(pre_com[5*i], pre_com[5*i+1], pre_com[5*i+2], pre_com[5*i+3], pre_com[5*i+4]);
 			com[i] = sp;
 		}
 
-		for (int rep = 0; rep < 10; rep++) {
+		for(int rep = 0; rep < 2; rep++) {
 			Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
 				size, simtime, rep);
 			simulation(param,com);
@@ -138,7 +138,7 @@ int main(){
 	}
 
 		for(int i=0 ; i < M ; i++){
-			delete com[i]; // = sp;
+			delete com[i];
 		}
 	} //for NU closes
 
