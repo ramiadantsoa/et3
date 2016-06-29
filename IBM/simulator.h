@@ -29,7 +29,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 	double MAX_TAU = 100;
 	//double pp = 1.15; //this is the power used to increment tau;
 
-	int N_STEP_T = 1000; // number of discretization of tau
+	int N_STEP_T = 500; // number of discretization of tau
 
 	double tau;
 	// SIMLUATE ALL DIFFERENT LEVEL OF FRAGMENTATION AND DENSITY OF RESOURCE PRODUCTION
