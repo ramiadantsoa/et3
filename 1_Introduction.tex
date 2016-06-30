@@ -1,0 +1,71 @@
+\section{Introduction}
+\label{sec:Introduction}
+
+Biodiversity is threatened, the current rate of extinction 100 times higher than background rate.
+The main cause is habitat loss and fragmentation.
+% On one hand it is important to understand how the external environment affect community dynamics
+% On the other hand,  we want to know what traits makes species more vulnerable to external environment.
+
+
+How species responds to habitat destruction is longstanding problem.
+In conservation, the species-area relationship informs about how many species will be lost for a given amount of habitat.
+A general rule of thumb is that destroying 90\% will kill about 50\% of the community.
+The problem is that it does not really tell, which species will go extinct.
+
+One can then look at general traits that make species more vulnerable.
+Probably the most important trait is the degree of specialization.
+Specialist species are more vulnerable to habitat loss and fragmentation.
+Partly because they have narrower ranges, lower abundances, and higher chances that their habitat will be destroyed.
+
+An important concept is the extinction threshold.
+It measures the amount of resource required for the persistence of a population.
+The extinction threshold depends on many things: the configuration of the landscape, the biology of the species, ...
+Hanski et al. developed a convenient measures that takes into account all these things.
+In a theoretical work by Tilman, they found that species with lowest colonization rates (due to a trade-off: they are also the best competitor) will
+extinct first.
+
+A second critical issue with extinction is that it is not instantaneous.
+It takes time for some species to go extinct.
+This is called transient time, because of that ghost species that will eventually go extinct.
+Hanski found for instance that transient time gets longer as one approaches the extinction threshold.
+
+% There should be work on specialization and extinction threshold here
+
+Currently, there is no work/general prediction that relates these 3 concepts: specialization, extinction threshold, and transient time.
+Here we use an individual based model to investigate the relationship among these three quantities.
+First, we ask without competition, how level specialization correlates with extinction threshold
+Second, we look at how transient time changes with niche width.
+Third, we ask how competitive interaction influences their respective extinction threshold.
+I will then relate these to data to give a prediction of how species and communities will respond..
+
+\section{Material and methods}
+\label{sec:Methods}
+We use the same model as in Ramiadantsoa.
+The quality/quantity of the landscape can be broken into fragmentation level: size of the patch, quantity of resource within patches, and the type of resource
+found in that patch (this is controlling the degree of aggregation of resource types).
+
+
+Extinction threshold: ameliorate the quality of the landscape (adding resource or reducing fragmentation) until the species persists. (also look at the variance)
+The supplementary file will contain figures where dispersal range depends on niche width.
+Transient time: run something above the extinction threshold then destroy the habitat (reducing resource production rate or increase mortality rate
+and increasing fragmentation).
+
+In the community, we look at the effect of competition, the strength of interaction on the extinction threshold.
+
+Technical details: C++, wrapped as a torus, we look at the total amount of resource not the mean, the relationship looks the same, hopefully!
+We assume that things have equilibrate if we duplicate times and nothing changes.
+
+Data:
+To illustrate to model, we look at various data, one from Brazil and one from Madagascar.
+
+
+\section{Results}
+\label{sec:Results}
+Figure 1 shows that as expected, extinction threshold increases with decreasing niche width.
+However the magnitude of changes depends on one key property of the landscape: resource type aggregation.
+If resource types are highly aggregated: there is slope is pretty low.
+
+The question here is whether I can estimate that slope just by looking at the fitness function.
+
+In absolute value, there is higher variance for extinction threshold for higher niche width.
+But when we look at the normalized standard deviation, things are the same, independent of niche or aggregation.
