@@ -39,6 +39,14 @@ public:
 		return this->total_colonization;
 	}
 
+	void modify_total_birth(double new_tb){
+		this->total_birth = new_tb;
+	}
+
+	void modify_total_death(double new_td){
+		this->total_death = new_td;
+	}
+
 	uInt get_temp_result(int i){
 		return this->temp_result[i];
 	}
