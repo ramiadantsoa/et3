@@ -1,28 +1,31 @@
 #ifndef __PATCH_H_
 #define __PATCH_H_
 class Patch {
-    public:
-        Patch(double _x, double _y, double _q, int _M, vector<Species*> com) {
-            this->x = _x;
-            this->y = _y;
-            this->quality = _q;
-            this->M = _M; // The number of species, i.e., length of occupancy matrix
-            this->occupancy = new int[_M];
-            this->colonization = new double[_M];
-			this->fitness = new double[_M];
-            for(int i = 0; i<_M; i++) {
-                this->occupancy[i] = 0;
-                this->colonization[i] = 0.0;
+  public:
+    Patch(double _x, double _y, double _q, int _M, vector<Species*> com,  double _cx, double _cy) {
+      this->x = _x;
+      this->y = _y;
+      this->quality = _q;
+      this->M = _M; // The number of species, i.e., length of occupancy matrix
+      this->occupancy = new int[_M];
+      this->colonization = new double[_M];
+      this->cx = _cx;
+      this->cy = _cy;
 
-                double opt_q = com[i]->get_opt_q();
-                double nu = com[i]->get_nu();
-                double lbessel = com[i]->get_sp_log_bessel();
+      this->fitness = new double[_M];
+      for(int i = 0; i<_M; i++) {
+          this->occupancy[i] = 0;
+          this->colonization[i] = 0.0;
 
-                // std::cout<< "the log bessel is " << lbessel << std::endl;
+          double opt_q = com[i]->get_opt_q();
+          double nu = com[i]->get_nu();
+          double lbessel = com[i]->get_sp_log_bessel();
 
-                this->fitness[i]=  nu == -1 ? 1 : exp(cos(2.0*PI*(_q - opt_q))/nu- lbessel);
-            }
-        }
+          // std::cout<< "the log bessel is " << lbessel << std::endl;
+
+          this->fitness[i]=  nu == -1 ? 1 : exp(cos(2.0*PI*(_q - opt_q))/nu- lbessel);
+      }
+    }
 
         ~Patch() {
             delete[] this->occupancy;
@@ -45,9 +48,18 @@ class Patch {
             return this->y;
         }
 
+        double get_cx() {
+            return this->cx;
+        }
+
+        double get_cy() {
+            return this->cy;
+        }
+
         double get_quality() {
             return this->quality;
         }
+
 
         int count_present_species() {
             int count = 0;
@@ -77,6 +89,7 @@ class Patch {
     private:
         int M;
         double x, y;
+        double cx, cy;
         double quality;
 		double *fitness;
 		double *colonization;
