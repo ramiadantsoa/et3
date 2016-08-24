@@ -8,6 +8,7 @@ private:
 	short int establishment;
 	double resource_aggreg;
 	double muR;
+	double tau;
 	double lambda;
 	double gammaH;
 	double size;
@@ -18,7 +19,7 @@ private:
 
 public:
 	Parameter(int _com_id, int _M, double _z, short int _establishment,
-		double _resource_aggregation, double _muR, double _lambda, double _gammaH,
+		double _resource_aggregation, double _muR, double _tau, double _lambda, double _gammaH,
 		double _size, double _T, int _repl){
 		this->com_id =_com_id;
 		this->M =_M;
@@ -26,6 +27,7 @@ public:
 		this->establishment=_establishment;
 		this->resource_aggreg= _resource_aggregation;
 		this->muR = _muR;
+		this->tau = _tau;
 		this->lambda=_lambda;
 		this->gammaH = _gammaH;
 		this->size =_size;
@@ -54,6 +56,10 @@ public:
 		return this->muR;
 	}
 
+	double get_tau(){
+		return this->tau;
+	}
+
 	double get_lambda(){
 		return this->lambda;
 	}
@@ -77,9 +83,9 @@ public:
 	string get_name(){
 		ostringstream tostring;
 		string est =establishment==1? "est" : "fec";
-		tostring<<"sim_"<<est<<"_z_"<<this->z<<"_aggreg_"<<this->resource_aggreg
+		tostring<<"sim_dest"<<est<<"_z_"<<this->z<<"_aggreg_"<<this->resource_aggreg
 		<<"_M_"<<this->M<<"_com_id_"<<com_id<<"_size_"<<this->size<<"_T_"<<this->T<<"_muR_"<<this->muR
-		<<"_lambda_"<<this->lambda << "_gH_" << this->gammaH <<"_replicates_"
+		<<"_tau_"<<this->tau<<"_lambda_"<<this->lambda << "_gH_" << this->gammaH <<"_replicates_"
 		<<this->replicates;
 		name = tostring.str();
 		return this->name;
