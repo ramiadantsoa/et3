@@ -1,7 +1,7 @@
 #ifndef __SIMULATOR_H_
 #define __SIMULATOR_H_
 
-void simulation(Parameter *Initial_Parameter, vector<Species*> com){
+void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destruct_param){
 	string output_final_occupancy; //output_final_occupancy stores the lambda, tau , gammaH, final result as a fraction of occupancy and the duration
 
 	ostringstream save_final_occupancy;
@@ -13,6 +13,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 	//INITIALIZE SPECIES PARAMETER
 	int M = Initial_Parameter->get_M();
 	double muR = Initial_Parameter->get_muR();
+	double tau=Initial_Parameter->get_tau();
 	double lambda=Initial_Parameter->get_lambda();
 	double gammaH = Initial_Parameter->get_gammaH();
 	double size =Initial_Parameter->get_size();
@@ -25,20 +26,9 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 		max_ls = new_max_ls;
 	}
 
-	double MIN_TAU = 0.1;// 0.75; //this needs to be adjusted with pp and N_STEP_L
-	double MAX_TAU = 100;
-	//double pp = 1.15; //this is the power used to increment tau;
-
-	int N_STEP_T = 500; // number of discretization of tau
-
-	double tau;
 	// SIMLUATE ALL DIFFERENT LEVEL OF FRAGMENTATION AND DENSITY OF RESOURCE PRODUCTION
 
-		for(int j = 0; j < N_STEP_T ; j++){
-			tau =(double) MAX_TAU*(j+1)/N_STEP_T;
-			//tau = (double)  (m_MIN_TAU/(PI*lambda*lambda*gammaH))*pow(pp,j);
-			// tau = (double) MIN_TAU*pow(pp,j);
-			//lambda = (double) MAX_LAMBDA*(i+1)/N_STEP_L;
+		for(int j = 0; j < 1 ; j++){
 			save_final_occupancy << tau << "," << lambda <<","<<gammaH;
 
 			cout<<"\n \nlambda is " <<lambda<< ", tau is "<< tau<< ", gammaH is "<< gammaH<<endl;
@@ -189,6 +179,24 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 			save_time_occupancy << "\n";
 
+			// INITIATE HABITAT DESTRUCTION
+			int case123;
+
+			std::cout << "enter 1 if reducing tau, 2 if reducing lambda, 3 is reducing gammaH: ";
+			std::cin >> case123;
+
+			switch (case123) {
+				case 1:            // reduce tau
+					tau*= destruct_param;
+					break;
+				case 2:            // reduce lambda
+					lambda*= sqrt(destruct_param);
+					break;
+				case 3:            // perturb gammaH
+					gammaH*= destruct_param;
+					break;
+			}
+
 			/*start testing if the colonization update works
 
 			double tt_col, death_rate;
@@ -218,6 +226,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 			end:
 
+
 			// grid->export_all_resource_units();
 
 			delete grid;
@@ -232,8 +241,8 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com){
 
 
 			/* CREATE A CONDITION SUCH THAT IF THE SPECIES PERSIST, THE SIMULATION ENDS*/
-			if(sum_occ > 0.) break;
-		} //for loop for tau closes
+			// if(sum_occ > 0.) break;
+		} //for loop for destruction parameter (or landscape quality) closes
 	//}
 
 

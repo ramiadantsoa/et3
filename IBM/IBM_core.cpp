@@ -63,7 +63,7 @@ boost::mt19937 rng(std::time(0));
 int main(){
 	double z = 1.0, aggreg = 0.0, size = 24, simtime = 4000, muR = 0.1;
 	short int est = 1,  M = 1, replicates = 0, com_id = 1;
-	double lambda = 0.1, gammaH = 1.0;
+	double tau = 10, lambda = 0.1, gammaH = 1.0;
 
   std::time_t seed_time = std::time(0);
   rng.seed(seed_time);
@@ -84,63 +84,58 @@ int main(){
 	std::cout << "\nenter aggregation ";
 	std::cin >> aggreg;
 	//
-	// // Enter community size and id
-	// std::cout << "\nM ";
-	// std::cin >> M;
+	// Enter community size and id
+	std::cout << "\nM ";
+	std::cin >> M;
 
-	int NU = 30;
-	for (int nn = 0; nn < NU; nn++) {
+	std::vector<double> pre_com(M*5);
 
-		// std::cout << "\nenter community ID ";
-		com_id = nn;
-		// std::cin >> com_id;
+	// For the moment assume a fixed community
+// This is for a single generalist
+	pre_com[0] = 0.5;
+	pre_com[1] = 0.5;
+	pre_com[2] = 0.5;
+	pre_com[3] = 0.5;
+	pre_com[4] = 0;
 
-		// Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
-			// size, simtime, replicates);
+// This is for all (4) the specialists
+	// colonization rate
+	pre_com[0+5] = pre_com[0+2*5] = pre_com[0+3*5] = pre_com[0+4*5] = 0.5;
+	// optimal q
+	pre_com[1+5] = 0.;
+	pre_com[1+2*5] = 0.25;
+	pre_com[1+3*5] = 0.5;
+	pre_com[1+4*5] = 0.75;
+	// niche width
+	pre_com[2+5] = pre_com[2+2*5] = pre_com[2+3*5] = pre_com[2+4*5] = 0.125;
+	// dispersal range
+	pre_com[3+5] = pre_com[3+2*5] = pre_com[3+3*5] = pre_com[3+4*5] = 0.125;
+	// species id
+	pre_com[4+5] = 1;
+	pre_com[4+2*5] = 2;
+	pre_com[4+3*5] = 3;
+	pre_com[4+4*5] = 4;
 
-		// short int rep = 0;
-
-		// Enter species parameters
-		double pp = 1.35; // discretization of nu
-		std::vector<double> pre_com(M*5);
-		for (int i = 0; i < M; i++) {
-
-			// std::cout << "\nenter colonization rate ";
-			// std::cin >> pre_com[5*i] ; //colonization rate
-			pre_com[5*i] = 0.5 ; //colonization rate
-			// std::cout << "\nenter optimal q ";
-			// std::cin >> pre_com[5*i+1] ; //optimal q
-			pre_com[5*i+1] = 0.5 ; //optimal q
-			// std::cout << "\nenter niche width ";
-			// std::cin >> pre_com[5*i+2]; // niche width nu, by convention, nu = -1 for generalist
-			pre_com[5*i+2] = nn == 29 ? -1 : 0.002*pow(pp,nn); // niche width nu, by convention, nu = -1 for generalist
-			// std::cout << "\nenter dispersal range ";
-			// std::cin >> pre_com[5*i+3]; // dispersal range
-			pre_com[5*i+3] = 0.5; // dispersal range
-			pre_com[5*i+4] = i; // species id
-
-		}
-
-
-		//INITIALIZE SPECIES CHARACTERISTICS
-		vector<Species*> com(M);
-		/* order of variable col, optimal q, nu, and dispersal */
-		for(int i=0 ; i < M ; i++){
-			Species *sp = new Species(pre_com[5*i], pre_com[5*i+1], pre_com[5*i+2], pre_com[5*i+3], pre_com[5*i+4]);
-			com[i] = sp;
-		}
-
-		for (int rep = 0; rep < 10; rep++) {
-			Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, lambda, gammaH,
-				size, simtime, rep);
-			simulation(param,com);
-			delete param;
+	//INITIALIZE SPECIES CHARACTERISTICS
+	vector<Species*> com(M);
+	/* order of variable col, optimal q, nu, and dispersal */
+	for(int i=0 ; i < M ; i++){
+		Species *sp = new Species(pre_com[5*i], pre_com[5*i+1], pre_com[5*i+2], pre_com[5*i+3], pre_com[5*i+4]);
+		com[i] = sp;
 	}
 
-		for(int i=0 ; i < M ; i++){
-			delete com[i]; // = sp;
-		}
-	} //for NU closes
+	double destruct_param = 1;
+
+	for (int rep = 0; rep < 1; rep++) {
+		Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, tau, lambda, gammaH,
+			size, simtime, rep);
+		simulation(param,com, destruct_param);
+		delete param;
+}
+
+	for(int i=0 ; i < M ; i++){
+		delete com[i]; // = sp;
+	}
 
 	return 0;
 }
