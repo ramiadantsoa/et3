@@ -15,19 +15,21 @@ Patch *new_patch(vector<Grain*> *habitat, Parameter *Initial_Parameter, double l
 	double _angle = 2*PI*get_random();
 	double q = get_random_patch(grain->get_q(), Initial_Parameter->get_aggreg());
 
-	double x = grain->get_x_pos()+_lambda*cos(_angle);
+	double x_pos =  grain->get_x_pos();
+	double x = x_pos+_lambda*cos(_angle);
 		if(x<0.0)
 			x+=size;
 		if(x> size)
 			x-=size;
 
-	double y = grain->get_y_pos()+_lambda*sin(_angle);
+	double y_pos =  grain->get_y_pos();
+	double y = y_pos +_lambda*sin(_angle);
 		if(y<0.0)
 			y+=size;
 		if(y> size)
 			y-=size;
 
-		Patch *new_p = new Patch(x, y, q, M, com);
+		Patch *new_p = new Patch(x, y, q, M, com, x_pos, y_pos);
 
 		return new_p;
 }

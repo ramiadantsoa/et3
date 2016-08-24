@@ -58,7 +58,7 @@ void update_death(vector<uInt> select_patch_death, Grid *grid,
 
 	int n_present = old_p->count_present_species();
 
-	Patch * temp_p = new Patch(old_p->get_x(),old_p->get_y(),  old_p->get_quality(), M, com);
+	Patch *temp_p = new Patch(old_p->get_x(),old_p->get_y(),  old_p->get_quality(), M, com,  old_p->get_cx(),old_p->get_cy());
 
 	for( int m = 0; m< M ; m++){
 		temp_p->occupancy[m] = old_p->occupancy[m];

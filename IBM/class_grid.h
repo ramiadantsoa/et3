@@ -189,7 +189,7 @@ Grid *initialize(Parameter *param, double resourceDensity,
 
 		//cout<<" patch quality "<< q<<endl;
 
-    Patch *p = new Patch(x, y, q, M, com);
+    Patch *p = new Patch(x, y, q, M, com,x_pos, y_pos);
 
 		//cout<< "x " << p->get_x() << " y " << p->get_y() << " q " << p->get_quality()<<" and fitness "<<p->get_fitness(1)<<"\n";
 
