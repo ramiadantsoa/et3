@@ -78,6 +78,11 @@ class ColonizationPerGrid{
 				this->grid_col[i+j*ngrid] = 0.0;
 			}
 		}
+
+		void assign_col_rate(int i, int j, double col){
+			this->grid_col[i+j*ngrid]= col;
+		}
+
 };
 
 ColonizationPerGrid *initializeColonizationGrid(Grid *g){
