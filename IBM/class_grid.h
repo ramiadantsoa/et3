@@ -29,6 +29,10 @@ class Grid {
             return this->ncells;
         }
 
+        double get_size(){
+          return this->size;
+        }
+
         void add_patch(Patch *p) {
             int i = (int) floor(p->get_x() / this->max_l);
             int j = (int) floor(p->get_y() / this->max_l);
@@ -37,22 +41,22 @@ class Grid {
             vec->push_back(p);
         }
 
-		void delete_patch( int i , int j , uInt k ){
-			 vector<Patch*> *vec = get_cell(i, j);
-             Patch *p = (*vec)[k];
-			 vec->erase(vec->begin()+k); //CAN BE OPTIMIZED
-             delete p;
-		}
+  		void delete_patch( int i , int j , uInt k ){
+  			 vector<Patch*> *vec = get_cell(i, j);
+               Patch *p = (*vec)[k];
+  			 vec->erase(vec->begin()+k); //CAN BE OPTIMIZED
+               delete p;
+  		}
 
 
         vector<Patch*> *get_cell(int i, int j) {
             return &this->cells[i + j*ncells];
         }
 
-		Patch *get_patch (int i , uInt k){
-			vector<Patch*> *patches = &this->cells[i];
-			return (*patches)[k];
-		}
+  		Patch *get_patch (int i , uInt k){
+  			vector<Patch*> *patches = &this->cells[i];
+  			return (*patches)[k];
+  		}
 
 
         uInt count_patches() {
@@ -83,30 +87,42 @@ class Grid {
             return count_vec;
         }
 
-		uInt count_per_grid( int i, int j){
-			uInt n_in_grid = 0;
-			vector<Patch*> *patches = get_cell(i,j);
-			n_in_grid =patches->size();
-            return n_in_grid;
-		}
+    		uInt count_per_grid( int i, int j){
+    			uInt n_in_grid = 0;
+    			vector<Patch*> *patches = get_cell(i,j);
+    			n_in_grid =patches->size();
+                return n_in_grid;
+    		}
 
-		double colrate_per_grid (int i, int j){
-			double col_grid =0.0;
-			vector<Patch*> *patches = get_cell(i,j);
+  		double colrate_per_grid (int i, int j){
+  			double col_grid =0.0;
+  			vector<Patch*> *patches = get_cell(i,j);
 
-			for(unsigned int k = 0; k<patches->size(); k++) {
-				Patch *p = (*patches)[k];
-                for(int m = 0; m < this->M; m++) {
-					col_grid += p->get_colonization(m);
-				}
-			}
-			return col_grid;
-		}
+  			for(unsigned int k = 0; k<patches->size(); k++) {
+  				Patch *p = (*patches)[k];
+                  for(int m = 0; m < this->M; m++) {
+  					col_grid += p->get_colonization(m);
+  				}
+  			}
+  			return col_grid;
+  		}
 
-		/*void export_all_resource_units(){
+      // string est =establishment==1? "est" : "fec";
+      // tostring<<"sim_dest"<<est<<"_z_"<<this->z<<"_aggreg_"<<this->resource_aggreg
+      // <<"_M_"<<this->M<<"_com_id_"<<com_id<<"_size_"<<this->size<<"_T_"<<this->T<<"_muR_"<<this->muR
+      // <<"_tau_"<<this->tau<<"_lambda_"<<this->lambda << "_gH_" << this->gammaH <<"_replicates_"
+      // <<this->replicates;
+      // name = tostring.str();
+      // return this->name;
+
+	void export_all_resource_units( short int destID){
 			string all_resource_units; // stores the position and the type of all patches
 			ostringstream convert_all_resource_units;
-			string resource_units_file_name= "resource unit data.csv";
+      // string resource_units_file_name = "resource_unit_data.csv";
+       ostringstream to_resource_units_file_name;
+       to_resource_units_file_name<<"resource_unit_data_"<<destID<<".csv"; // destID is 1 (2) before (after) destruction
+       string resource_units_file_name;
+       resource_units_file_name = to_resource_units_file_name.str();
 
 			 for (int i = 0; i<ncells; i++) {
                 for(int j = 0; j<ncells; j++) {
@@ -130,7 +146,7 @@ class Grid {
 			resource_units_file<<all_resource_units;
 			resource_units_file.close();
 
-		}*/
+		}
 
 
     private:
@@ -207,7 +223,7 @@ Grid *initialize(Parameter *param, double resourceDensity,
         g->add_patch(p);
     }
 
-	//g->export_all_resource_units();
+	g->export_all_resource_units(1);
 
     return g;
 }
