@@ -19,7 +19,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destr
 	double size =Initial_Parameter->get_size();
 	double T = Initial_Parameter->get_T();
 
-	//find species with highest dispersal range
+	//find species with longest dispersal range
 	double new_max_ls, max_ls = 0.0;
 	for (int i = 0; i < M; i++) {
 		new_max_ls = std::max(max_ls, com[i]->get_l());
@@ -188,29 +188,21 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destr
 			switch (case123) {
 				case 1:            // reduce tau
 					tau*= destruct_param;
+					destroy_patches_tau(grid, destruct_param);
 					break;
 				case 2:            // reduce lambda
 					lambda*= sqrt(destruct_param);
+					// destroy_patches_lambda(grid, destruct_param, lambda);
 					break;
 				case 3:            // perturb gammaH
 					gammaH*= destruct_param;
+					// destroy_patches_gammaH(grid, habitat, destruct_param);
 					break;
 			}
+			update_general_variable(grid, var, cpg, com, Initial_Parameter, destruct_param, tau, lambda, gammaH, size, muR, max_ls);
 
-			/*start testing if the colonization update works
+//// the new sim should roughly start here........
 
-			double tt_col, death_rate;
-
-			cout<< " death rate "<< var->get_death()<< "\n" << "computed death rate "<< var->get_temp_result(0)<<"\n";
-
-			tt_col= total_colonization_check(grid,Initial_Parameter, SpChar);
-
-			cout<<"total colonization "<< var->get_col()<<"\n"<<"long total colonization "<< tt_col<<"\n";
-
-
-			system("pause");
-
-			end testing*/
 
       cout << "Cleaning up\n";
       cout.flush();
@@ -277,6 +269,21 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destr
 	time_occ << output_time_occupancy;
 	time_occ.close();
 }//simulator closes
+
+/*start testing if the colonization update works
+
+double tt_col, death_rate;
+
+cout<< " death rate "<< var->get_death()<< "\n" << "computed death rate "<< var->get_temp_result(0)<<"\n";
+
+tt_col= total_colonization_check(grid,Initial_Parameter, SpChar);
+
+cout<<"total colonization "<< var->get_col()<<"\n"<<"long total colonization "<< tt_col<<"\n";
+
+
+system("pause");
+
+end testing*/
 
 
 #endif // __SIMULATOR_H_
