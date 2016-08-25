@@ -53,6 +53,10 @@ boost::mt19937 rng(std::time(0));
 #include "section_death.h"
 #include "section_colonization.h"
 
+/*  DESTROYING THE LANDSCAPE */
+
+#include "section_destroy_land.h"
+
 /*  CONTAINS THE MAIN SIMULATOR */
 
 #include "simulator.h"
@@ -61,9 +65,9 @@ boost::mt19937 rng(std::time(0));
 // typedef number<cpp_dec_float<100> > cpp_dec_float_100;
 
 int main(){
-	double z = 1.0, aggreg = 0.0, size = 24, simtime = 4000, muR = 0.1;
+	double z = 1.0, aggreg = 0.0, size = 6, simtime = 1, muR = 0.1;
 	short int est = 1,  M = 1, replicates = 0, com_id = 1;
-	double tau = 10, lambda = 0.1, gammaH = 1.0;
+	double tau = 20, lambda = 0.2, gammaH = 1.0;
 
   std::time_t seed_time = std::time(0);
   rng.seed(seed_time);
@@ -124,16 +128,16 @@ int main(){
 		com[i] = sp;
 	}
 
-	double destruct_param = 1;
+	double destruct_param = 0.01;
 
 	for (int rep = 0; rep < 1; rep++) {
 		Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, tau, lambda, gammaH,
 			size, simtime, rep);
 		simulation(param,com, destruct_param);
 		delete param;
-}
+	}
 
-	for(int i=0 ; i < M ; i++){
+	for(int i = 0 ; i < M ; i++){
 		delete com[i]; // = sp;
 	}
 
