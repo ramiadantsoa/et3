@@ -23,7 +23,7 @@ Patch *new_patch(vector<Grain*> *habitat, Parameter *Initial_Parameter, double l
 			x-=size;
 
 	double y_pos =  grain->get_y_pos();
-	double y = y_pos +_lambda*sin(_angle);
+	double y = y_pos + _lambda*sin(_angle);
 		if(y<0.0)
 			y+=size;
 		if(y> size)
