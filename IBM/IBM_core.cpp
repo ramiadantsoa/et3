@@ -70,7 +70,7 @@ int main(){
 	double tau = 40, lambda = 0.2, gammaH = 2.0;
 
   std::time_t seed_time = std::time(0);
-  rng.seed(123456);
+  rng.seed(seed_time);
   // rng.seed(seed_time);
 
 	// Parameter input
