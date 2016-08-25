@@ -53,7 +53,7 @@ boost::mt19937 rng(std::time(0));
 #include "section_death.h"
 #include "section_colonization.h"
 
-/*  DESTROYING THE LANDSCAPE */
+/*  DESTROYING THE LANDSCAPE */gt
 
 #include "section_destroy_land.h"
 
@@ -85,7 +85,7 @@ int main(){
 	// // Model types
 	// std::cout << "\nenter competition ";
 	// std::cin >> z;
-	std::cout << "\nenter aggregation ";
+	std::cout << "\nenter aggregation "; //note that aggregation now takes values from 0 to 0.5, when 0 means aggregated, 0.5 means uniform.
 	std::cin >> aggreg;
 	//
 	// Enter community size and id
