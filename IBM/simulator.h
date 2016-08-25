@@ -184,22 +184,26 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destr
 
 			std::cout << "enter 1 if reducing tau, 2 if reducing lambda, 3 is reducing gammaH: ";
 			std::cin >> case123;
-
+			grid->export_all_resource_units(1);
 			switch (case123) {
 				case 1:            // reduce tau
-					tau*= destruct_param;
+					tau *= destruct_param;
 					destroy_patches_tau(grid, destruct_param);
+					grid->export_all_resource_units(2);
 					break;
 				case 2:            // reduce lambda
-					lambda*= sqrt(destruct_param);
-					// destroy_patches_lambda(grid, destruct_param, lambda);
+					lambda *= sqrt(destruct_param);
+					destroy_patches_lambda(grid, habitat, destruct_param, lambda);
+					grid->export_all_resource_units(2);
 					break;
 				case 3:            // perturb gammaH
-					gammaH*= destruct_param;
-					// destroy_patches_gammaH(grid, habitat, destruct_param);
+					gammaH *= destruct_param;
+					destroy_patches_gammaH(grid, habitat, destruct_param);
+					grid->export_all_resource_units(2);
+					export_all_patches(habitat, 2);
 					break;
 			}
-			update_general_variable(grid, var, cpg, com, Initial_Parameter, destruct_param, tau, lambda, gammaH, size, muR, max_ls);
+			update_general_variable(grid, var, cpg, ppg, com, Initial_Parameter, destruct_param, tau, lambda, gammaH, size, muR, max_ls);
 
 //// the new sim should roughly start here........
 

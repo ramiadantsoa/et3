@@ -53,7 +53,7 @@ boost::mt19937 rng(std::time(0));
 #include "section_death.h"
 #include "section_colonization.h"
 
-/*  DESTROYING THE LANDSCAPE */gt
+/*  DESTROYING THE LANDSCAPE */
 
 #include "section_destroy_land.h"
 
@@ -65,12 +65,13 @@ boost::mt19937 rng(std::time(0));
 // typedef number<cpp_dec_float<100> > cpp_dec_float_100;
 
 int main(){
-	double z = 1.0, aggreg = 0.0, size = 6, simtime = 1, muR = 0.1;
-	short int est = 1,  M = 1, replicates = 0, com_id = 1;
-	double tau = 20, lambda = 0.2, gammaH = 1.0;
+	double z = 1.0, aggreg = 0.0, size = 4, simtime = 1, muR = 0.1;
+	short int est = 1,  M = 5, replicates = 0, com_id = 1;
+	double tau = 40, lambda = 0.2, gammaH = 2.0;
 
   std::time_t seed_time = std::time(0);
-  rng.seed(seed_time);
+  rng.seed(123456);
+  // rng.seed(seed_time);
 
 	// Parameter input
 	// std::cout << "enter size ";
@@ -85,12 +86,12 @@ int main(){
 	// // Model types
 	// std::cout << "\nenter competition ";
 	// std::cin >> z;
-	std::cout << "\nenter aggregation "; //note that aggregation now takes values from 0 to 0.5, when 0 means aggregated, 0.5 means uniform.
-	std::cin >> aggreg;
-	//
-	// Enter community size and id
-	std::cout << "\nM ";
-	std::cin >> M;
+	// std::cout << "\nenter aggregation "; //note that aggregation now takes values from 0 to 0.5, when 0 means aggregated, 0.5 means uniform.
+	// std::cin >> aggreg;
+	// //
+	// // Enter community size and id
+	// std::cout << "\nM ";
+	// std::cin >> M;
 
 	std::vector<double> pre_com(M*5);
 
@@ -128,7 +129,7 @@ int main(){
 		com[i] = sp;
 	}
 
-	double destruct_param = 0.01;
+	double destruct_param = 0.25;
 
 	for (int rep = 0; rep < 1; rep++) {
 		Parameter *param = new Parameter(com_id, M, z, est, aggreg, muR, tau, lambda, gammaH,

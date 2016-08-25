@@ -57,6 +57,11 @@ class Grid {
   			vector<Patch*> *patches = &this->cells[i];
   			return (*patches)[k];
   		}
+      
+  		Patch *get_ru (int i , int j, uInt k){
+  			vector<Patch*> *patches = get_cell(i,j);
+  			return (*patches)[k];
+  		}
 
 
         uInt count_patches() {
@@ -115,7 +120,7 @@ class Grid {
       // name = tostring.str();
       // return this->name;
 
-	void export_all_resource_units( short int destID){
+	void export_all_resource_units(int destID){
 			string all_resource_units; // stores the position and the type of all patches
 			ostringstream convert_all_resource_units;
       // string resource_units_file_name = "resource_unit_data.csv";

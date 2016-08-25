@@ -1,9 +1,9 @@
-#ifndef __PATCH_GRID_H_
+ #ifndef __PATCH_GRID_H_
 #define __PATCH_GRID_H_
 
 class PatchPerGrid {
 	private:
-		int ngrid; 
+		int ngrid;
 		uInt *grid_nsp;
 
 	public:
@@ -69,7 +69,7 @@ PatchPerGrid *initializePatchGrid(Grid *g){
 	uInt newsp =0;
 
 	PatchPerGrid *ppgrid = new PatchPerGrid(ncell);
-	
+
 	for(int i= 0 ; i<ncell ; i++){
 		for(int j=0 ; j<ncell ; j++){
 			newsp = g->count_per_grid(i,j);
