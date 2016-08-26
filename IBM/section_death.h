@@ -15,9 +15,13 @@ vector<uInt> select_patch_death(Grid *grid, PatchPerGrid *ppg, Variable *var){
 
 	vector<Patch*> *cell = grid->get_cell(ni,nj);
 
-	uInt chosen_patch = get_rand_integer(ppg->get_grid(ni,nj));//select the patch in grid ni nj
+	assert(ppg->get_grid(ni,nj) > 0);
 
-	assert(chosen_patch<cell->size());
+	uInt chosen_patch = get_rand_integer(ppg->get_grid(ni,nj));//select the patch in grid ni nj
+	if(chosen_patch>= cell->size()){
+		cout<<"size_"<<cell->size()<<"_chosen_"<<chosen_patch<<"\n";
+	}
+		assert(chosen_patch<cell->size());
 
 	result[0]=ni;
 	result[1]=nj;

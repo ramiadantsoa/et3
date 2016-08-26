@@ -70,7 +70,7 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destr
 			double sum_occ = 0.0; //this is used to test if the species persist and is used very late (declare here to avoid cross initialization)
 			double t = 0.0;
 			double discrete_time = 0.0;
-			double step_time = 1.0; // for transient time, occupancy is recorded for each  time unit.
+			double step_time = 50.0; // for transient time, occupancy is recorded for each  time unit.
 
       int half_T = (int) floor(Initial_Parameter->get_T()/2);
 			double choose_event=0.0;
@@ -150,34 +150,34 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destr
 					}
 				}
 
-				if (discrete_time < t) {
-					save_time_occupancy <<",{ " << discrete_time;
-					for (int m = 1; m < M+1;  m++) {
-						assert(var->fraction_occupancy(m)<=1. && var->fraction_occupancy(m)>=0.);
-						save_time_occupancy << ";" << var->fraction_occupancy(m);
-					}
-					save_time_occupancy << "}";
-					discrete_time+= step_time;
-				}
-
-				total_abundance = var->get_total_abundance();
-
-				if(t > half_T + final_result[0] || total_abundance == 0 ){
-					//if (t < half_T+step+1){
-						//step+= 1.0;
-						for (int m = 0 ; m<M+1 ; m++){
-							assert(var->fraction_occupancy(m)<=1.);
-							final_result[m]+= var->fraction_occupancy(m);//(double) var->get_temp_result(m+1)/var->get_temp_result(0);
-						}
-					//}
-				}
+				// if (discrete_time < t) {
+				// 	save_time_occupancy <<",{ " << discrete_time;
+				// 	for (int m = 1; m < M+1;  m++) {
+				// 		assert(var->fraction_occupancy(m)<=1. && var->fraction_occupancy(m)>=0.);
+				// 		save_time_occupancy << ";" << var->fraction_occupancy(m);
+				// 	}
+				// 	save_time_occupancy << "}";
+				// 	discrete_time+= step_time;
+				// }
+				//
+				// total_abundance = var->get_total_abundance();
+				//
+				// if(t > half_T + final_result[0] || total_abundance == 0 ){
+				// 	//if (t < half_T+step+1){
+				// 		//step+= 1.0;
+				// 		for (int m = 0 ; m<M+1 ; m++){
+				// 			assert(var->fraction_occupancy(m)<=1.);
+				// 			final_result[m]+= var->fraction_occupancy(m);//(double) var->get_temp_result(m+1)/var->get_temp_result(0);
+				// 		}
+				// 	//}
+				// }
 
 				//system("read");
 				//for(int m = 0; m < M+1; m++) cout<< final_result[m]<<endl;
 
-			}//while closes
+			}// first while closes
 
-			save_time_occupancy << "\n";
+			// save_time_occupancy << "\n";
 
 			// INITIATE HABITAT DESTRUCTION
 			int case123;
@@ -205,7 +205,80 @@ void simulation(Parameter *Initial_Parameter, vector<Species*> com, double destr
 			}
 			update_general_variable(grid, var, cpg, ppg, com, Initial_Parameter, destruct_param, tau, lambda, gammaH, size, muR, max_ls);
 
-//// the new sim should roughly start here........
+			discrete_time = ceil(T);
+			while(t<2*T && total_abundance != 0){
+				total_event = var->get_birth()+ var->get_death() + var->get_col();//calculates the rate that an event happens
+				dt = get_exp(total_event);
+				t+=dt;
+				choose_event= total_event*get_random();
+
+				if(choose_event <= var->get_birth()) {
+					// cout<<"birth \n";
+					Patch *new_p = new_patch(habitat,Initial_Parameter, lambda, com);
+					update_birth(new_p, grid, ppg, cpg,Initial_Parameter, com, var, max_ls);
+
+					// double totcol_b = total_colonization_check(grid, com,  Initial_Parameter,  max_ls);
+					// cout<<" birth total colonization var " << var->get_col() << " and from calculation " << totcol_b<<endl;
+				}
+				else{
+					if(choose_event <= var->get_birth() + var->get_death()) {
+					// cout<<"death \n ";
+					vector<uInt> chosen_death = select_patch_death(grid,ppg, var);
+					update_death(chosen_death, grid, ppg, cpg, Initial_Parameter, com,var);
+					npatches =grid->count_patches();
+					if(npatches == 0){
+						save_time_occupancy << "{" << discrete_time;
+						for( int m = 0; m < M ; m++){
+							final_result[m+1]= 0.0;
+							cout<<final_result[m+1]<<"\t";
+							save_final_occupancy<<","<<final_result[m+1];
+							save_time_occupancy << ";" << final_result[m+1];
+						}
+						save_final_occupancy<<"\n";
+						save_time_occupancy<<"} \n";
+						goto end;
+					}
+
+					// double totcol_d = total_colonization_check(grid, com,  Initial_Parameter, max_ls);
+					// cout<<" death total colonization var " << var->get_col() << " and from calculation " << totcol_d<<endl;
+					}
+					else {
+						// cout<<"colonization \n " ;
+					vector<uInt> chosen_col = select_patch_col(grid, cpg,var,M);
+					update_colonization(chosen_col, grid, cpg, Initial_Parameter, var);
+					update_colonization_rest(chosen_col, grid, cpg, Initial_Parameter, com, var);
+
+					// double totcol_c = total_colonization_check(grid, com , Initial_Parameter, max_ls);
+					// cout<<" colonization total colonization var " << var->get_col() << " and from calculation " << totcol_c<<endl;
+					}
+				}
+
+				if (discrete_time < t) {
+					save_time_occupancy <<",{ " << discrete_time;
+					for (int m = 1; m < M+1;  m++) {
+						assert(var->fraction_occupancy(m)<=1. && var->fraction_occupancy(m)>=0.);
+						save_time_occupancy << ";" << var->fraction_occupancy(m);
+					}
+					save_time_occupancy << "}";
+					discrete_time+= step_time;
+				}
+
+				total_abundance = var->get_total_abundance();
+
+				if(t > T+ half_T + final_result[0] || total_abundance == 0 ){
+					//if (t < half_T+step+1){
+						//step+= 1.0;
+						for (int m = 0 ; m<M+1 ; m++){
+							assert(var->fraction_occupancy(m)<=1.);
+							final_result[m]+= var->fraction_occupancy(m);//(double) var->get_temp_result(m+1)/var->get_temp_result(0);
+						}
+					//}
+				}
+
+				//system("read");
+				//for(int m = 0; m < M+1; m++) cout<< final_result[m]<<endl;
+
+			}// second while closes
 
 
       cout << "Cleaning up\n";

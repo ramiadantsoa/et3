@@ -65,12 +65,12 @@ boost::mt19937 rng(std::time(0));
 // typedef number<cpp_dec_float<100> > cpp_dec_float_100;
 
 int main(){
-	double z = 1.0, aggreg = 0.0, size = 4, simtime = 1, muR = 0.1;
+	double z = 1.0, aggreg = 0.0, size = 6, simtime = 1000, muR = 0.1;
 	short int est = 1,  M = 5, replicates = 0, com_id = 1;
 	double tau = 40, lambda = 0.2, gammaH = 2.0;
 
   std::time_t seed_time = std::time(0);
-  rng.seed(seed_time);
+  rng.seed(123456);
   // rng.seed(seed_time);
 
 	// Parameter input
